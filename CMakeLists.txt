@@ -31,6 +31,7 @@ endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
+
 # Support Visual Studio Code
 include(CMakeToolsHelpers OPTIONAL)
 include(FeatureSummary)
@@ -384,9 +385,9 @@ if(APPLE AND CMAKE_COMPILER_IS_CLANGXX)
 endif()
 
 if(WITH_DEV_BUILD)
-    add_definitions(-DQT_DEPRECATED_WARNINGS)
+    add_compile_definitions(QT_DEPRECATED_WARNINGS QT_DISABLE_DEPRECATED_BEFORE=0x050F00)
 else()
-    add_definitions(-DQT_NO_DEPRECATED_WARNINGS)
+    add_compile_definitions(QT_NO_DEPRECATED_WARNINGS)
     add_gcc_compiler_cxxflags("-Wno-deprecated-declarations")
 endif()
 
