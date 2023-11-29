@@ -21,6 +21,7 @@
 #include <QAbstractTableModel>
 #include <QPixmap>
 #include <QSet>
+#include <QLocale>
 
 #include "core/Config.h"
 
@@ -94,7 +95,7 @@ private:
     QSet<const Group*> m_allGroups;
 
     const QString HiddenContentDisplay;
-    const Qt::DateFormat DateFormat;
+    const QLocale::FormatType DateFormat;
 };
 
 #endif // KEEPASSX_ENTRYMODEL_H

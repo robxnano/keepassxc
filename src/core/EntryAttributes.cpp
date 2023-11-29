@@ -238,7 +238,7 @@ void EntryAttributes::copyCustomKeysFrom(const EntryAttributes* other)
 bool EntryAttributes::areCustomKeysDifferent(const EntryAttributes* other)
 {
     // check if they are equal ignoring the order of the keys
-    if (keys().toSet() != other->keys().toSet()) {
+    if (QSet<QString>(keys().begin(), keys().end()) != QSet<QString>(other->keys().begin(), other->keys().end())) {
         return true;
     }
 

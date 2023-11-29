@@ -25,6 +25,7 @@
 #include "core/PasswordHealth.h"
 #include "gui/Icons.h"
 
+#include <QLocale>
 #include <QStandardItemModel>
 
 ReportsWidgetStatistics::ReportsWidgetStatistics(QWidget* parent)
@@ -79,16 +80,16 @@ void ReportsWidgetStatistics::showEvent(QShowEvent* event)
 
 void ReportsWidgetStatistics::calculateStats()
 {
+    QLocale locale = QLocale();
     const QScopedPointer<DatabaseStats> stats(
         AsyncTask::runAndWaitForFuture([this] { return new DatabaseStats(m_db); }));
-
     m_referencesModel->clear();
     addStatsRow(tr("Database name"), m_db->metadata()->name());
     addStatsRow(tr("Description"), m_db->metadata()->description());
     addStatsRow(tr("Location"), m_db->filePath());
     addStatsRow(tr("Database created"),
-                m_db->rootGroup()->timeInfo().creationTime().toString(Qt::DefaultLocaleShortDate));
-    addStatsRow(tr("Last saved"), stats->modified.toString(Qt::DefaultLocaleShortDate));
+                locale.toString(m_db->rootGroup()->timeInfo().creationTime(), QLocale::ShortFormat));
+    addStatsRow(tr("Last saved"), locale.toString(stats->modified, QLocale::ShortFormat));
     addStatsRow(tr("Unsaved changes"),
                 m_db->isModified() ? tr("yes") : tr("no"),
                 m_db->isModified(),

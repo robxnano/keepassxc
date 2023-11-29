@@ -20,6 +20,7 @@
 #include "core/Config.h"
 
 #include <QProcessEnvironment>
+#include <QLocale>
 
 FileDialog* FileDialog::m_instance(nullptr);
 

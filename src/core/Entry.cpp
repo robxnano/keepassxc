@@ -438,7 +438,7 @@ int Entry::size() const
     size += this->autoTypeAssociations()->associationsSize();
     size += this->attachments()->attachmentsSize();
     size += this->customData()->dataSize();
-    const QStringList tags = this->tags().split(delimiter, QString::SkipEmptyParts);
+    const QStringList tags = this->tags().split(delimiter, Qt::SkipEmptyParts);
     for (const QString& tag : tags) {
         size += tag.toUtf8().size();
     }
@@ -665,14 +665,14 @@ void Entry::setOverrideUrl(const QString& url)
 void Entry::setTags(const QString& tags)
 {
     static QRegExp rx("(\\,|\\t|\\;)");
-    auto taglist = tags.split(rx, QString::SkipEmptyParts);
+    auto taglist = tags.split(rx, Qt::SkipEmptyParts);
     // Trim whitespace before/after tag text
     for (auto itr = taglist.begin(); itr != taglist.end(); ++itr) {
         *itr = itr->trimmed();
     }
     // Remove duplicates
-    auto tagSet = QSet<QString>::fromList(taglist);
-    taglist = tagSet.toList();
+    auto tagSet = QSet<QString>(taglist.begin(), taglist.end());
+    taglist = QList<QString>(tagSet.begin(), tagSet.end());
     // Sort alphabetically
     taglist.sort();
     set(m_data.tags, taglist);

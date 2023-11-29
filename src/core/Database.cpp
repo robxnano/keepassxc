@@ -712,7 +712,7 @@ void Database::updateTagList()
         }
     }
 
-    m_tagList = tagSet.toList();
+    m_tagList = QStringList(tagSet.begin(), tagSet.end());
     m_tagList.sort();
     emit tagListUpdated();
 }

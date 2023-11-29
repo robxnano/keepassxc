@@ -226,7 +226,7 @@ void OpenSSHKey::clearPrivate()
 bool OpenSSHKey::extractPEM(const QByteArray& in, QByteArray& out)
 {
     QString pem = QString::fromLatin1(in);
-    QStringList rows = pem.split(QRegularExpression("(?:\r?\n|\r)"), QString::SkipEmptyParts);
+    QStringList rows = pem.split(QRegularExpression("(?:\r?\n|\r)"), Qt::SkipEmptyParts);
 
     if (rows.length() < 3) {
         m_error = tr("Invalid key file, expecting an OpenSSH key");

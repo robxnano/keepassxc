@@ -120,8 +120,8 @@ void KdbxXmlReader::readDatabase(QIODevice* device, Database* db, KeePass2Random
         qWarning("KdbxXmlReader::readDatabase: found %d invalid entry reference(s)", m_tmpParent->children().size());
     }
 
-    const QSet<QString> poolKeys = asConst(m_binaryPool).keys().toSet();
-    const QSet<QString> entryKeys = asConst(m_binaryMap).keys().toSet();
+    const auto poolKeys = QSet<QString>(asConst(m_binaryPool).keys().begin(), asConst(m_binaryPool).keys().end());
+    const auto entryKeys = QSet<QString>(asConst(m_binaryMap).keys().begin(), asConst(m_binaryMap).keys().end());
     const QSet<QString> unmappedKeys = entryKeys - poolKeys;
     const QSet<QString> unusedKeys = poolKeys - entryKeys;
 
@@ -815,7 +815,7 @@ Entry* KdbxXmlReader::parseEntry(bool history)
     }
 
     for (const StringPair& ref : asConst(binaryRefs)) {
-        m_binaryMap.insertMulti(ref.first, qMakePair(entry, ref.second));
+        m_binaryMap.insert(ref.first, qMakePair(entry, ref.second));
     }
 
     return entry;
