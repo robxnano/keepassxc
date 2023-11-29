@@ -568,8 +568,8 @@ Merger::ChangeList Merger::mergeDeletions(const MergeContext& context)
 
     while (!groups.isEmpty()) {
         auto* group = groups.takeFirst();
-        if (!(QSet<Group*>(group->children().begin(), group->children().end()) &
-              QSet<Group*>(groups.begin(), groups.end())).isEmpty()) {
+        auto children = group->children();
+        if (!(QSet<Group*>(children.begin(), children.end()) & QSet<Group*>(groups.begin(), groups.end())).isEmpty()) {
             // we need to finish all children before we are able to determine if the group can be removed
             groups << group;
             continue;

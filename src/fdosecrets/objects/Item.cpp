@@ -400,7 +400,7 @@ namespace FdoSecrets
         Q_ASSERT(group);
 
         // root group is represented by a single slash, thus adding an empty component.
-        pathComponents.prepend(QLatin1Literal(""));
+        pathComponents.prepend(QLatin1String(""));
 
         return pathComponents.join('/');
     }

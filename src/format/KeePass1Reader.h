@@ -20,6 +20,7 @@
 
 #include <QCoreApplication>
 #include <QSharedPointer>
+#include <QHash>
 
 class Database;
 class Entry;

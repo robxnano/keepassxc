@@ -36,9 +36,9 @@ namespace
             date = QDateTime::fromString(dateValue, "yyyyMM");
             date.setTimeSpec(Qt::UTC);
         } else if (value.isString()) {
-            date = QDateTime::fromTime_t(value.toString().toUInt(), Qt::UTC);
+            date = QDateTime::fromSecsSinceEpoch(value.toString().toUInt(), Qt::UTC);
         } else {
-            date = QDateTime::fromTime_t(value.toInt(), Qt::UTC);
+            date = QDateTime::fromSecsSinceEpoch(value.toInt(), Qt::UTC);
         }
         return date;
     }

@@ -28,10 +28,14 @@ QDateTime Clock::currentDateTime()
     return instance().currentDateTimeImpl();
 }
 
-uint Clock::currentSecondsSinceEpoch()
+qint64 Clock::currentSecondsSinceEpoch()
 {
     // TODO: change to toSecsSinceEpoch() when min Qt >= 5.8
-    return instance().currentDateTimeImpl().toTime_t();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 8, 0)
+    return instance().currentDateTimeImpl().toSecsSinceEpoch();
+#else
+    return static_cast<qint64>(instance().currentDateTimeImpl().toTime_t());
+#endif
 }
 
 qint64 Clock::currentMilliSecondsSinceEpoch()

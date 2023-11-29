@@ -150,12 +150,12 @@ Entry* OpVaultReader::processBandEntry(const QJsonObject& bandEntry, const QDir&
     bool timeInfoOk = false;
     if (bandEntry.contains("created")) {
         auto createdTime = static_cast<uint>(bandEntry["created"].toInt());
-        ti.setCreationTime(QDateTime::fromTime_t(createdTime, Qt::UTC));
+        ti.setCreationTime(QDateTime::fromSecsSinceEpoch(createdTime, Qt::UTC));
         timeInfoOk = true;
     }
     if (bandEntry.contains("updated")) {
         auto updateTime = static_cast<uint>(bandEntry["updated"].toInt());
-        ti.setLastModificationTime(QDateTime::fromTime_t(updateTime, Qt::UTC));
+        ti.setLastModificationTime(QDateTime::fromSecsSinceEpoch(updateTime, Qt::UTC));
         timeInfoOk = true;
     }
     // "tx" is modified by sync, not by user; maybe a custom attribute?

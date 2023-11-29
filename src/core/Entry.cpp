@@ -1381,10 +1381,10 @@ Entry::PlaceholderType Entry::placeholderType(const QString& placeholder) const
     if (!placeholder.startsWith(QLatin1Char('{')) || !placeholder.endsWith(QLatin1Char('}'))) {
         return PlaceholderType::NotPlaceholder;
     }
-    if (placeholder.startsWith(QLatin1Literal("{S:"))) {
+    if (placeholder.startsWith(QLatin1String("{S:"))) {
         return PlaceholderType::CustomAttribute;
     }
-    if (placeholder.startsWith(QLatin1Literal("{REF:"))) {
+    if (placeholder.startsWith(QLatin1String("{REF:"))) {
         return PlaceholderType::Reference;
     }
 

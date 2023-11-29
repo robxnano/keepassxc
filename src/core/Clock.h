@@ -27,7 +27,7 @@ public:
     static QDateTime currentDateTimeUtc();
     static QDateTime currentDateTime();
 
-    static uint currentSecondsSinceEpoch();
+    static qint64 currentSecondsSinceEpoch();
     static qint64 currentMilliSecondsSinceEpoch();
 
     static QDateTime serialized(const QDateTime& dateTime);

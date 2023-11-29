@@ -50,7 +50,8 @@ bool EntryAttachments::hasKey(const QString& key) const
 
 QSet<QByteArray> EntryAttachments::values() const
 {
-    return QSet<QByteArray>(asConst(m_attachments).values().begin(), asConst(m_attachments).values().end());
+    auto attachments = asConst(m_attachments).values();
+    return QSet<QByteArray>(attachments.begin(), attachments.end());
 }
 
 QByteArray EntryAttachments::value(const QString& key) const

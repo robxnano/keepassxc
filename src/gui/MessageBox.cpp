@@ -22,6 +22,7 @@
 #include <QMap>
 #include <QPushButton>
 #include <QWindow>
+#include <QHash>
 
 QWindow* MessageBox::m_overrideParent(nullptr);
 
