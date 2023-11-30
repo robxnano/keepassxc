@@ -291,8 +291,8 @@ bool Kdbx4Writer::serializeVariantMap(const QVariantMap& map, QByteArray& output
         QByteArray typeBytes;
         typeBytes.append(static_cast<char>(fieldType));
         QByteArray nameBytes = k.toUtf8();
-        QByteArray nameLenBytes = Endian::sizedIntToBytes(nameBytes.size(), KeePass2::BYTEORDER);
-        QByteArray dataLenBytes = Endian::sizedIntToBytes(data.size(), KeePass2::BYTEORDER);
+        QByteArray nameLenBytes = Endian::sizedIntToBytes(static_cast<int>(nameBytes.size()), KeePass2::BYTEORDER);
+        QByteArray dataLenBytes = Endian::sizedIntToBytes(static_cast<int>(data.size()), KeePass2::BYTEORDER);
 
         CHECK_RETURN_FALSE(buf.write(typeBytes) == 1);
         CHECK_RETURN_FALSE(buf.write(nameLenBytes) == 4);

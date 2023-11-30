@@ -207,7 +207,11 @@ void NixUtils::registerNativeEventFilter()
     qApp->installNativeEventFilter(this);
 }
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 bool NixUtils::nativeEventFilter(const QByteArray& eventType, void* message, qintptr*)
+#else
+bool NixUtils::nativeEventFilter(const QByteArray& eventType, void* message, long int*)
+#endif
 {
 #ifdef WITH_XC_X11
     if (eventType != QByteArrayLiteral("xcb_generic_event_t")) {
@@ -355,7 +359,12 @@ quint64 NixUtils::getProcessStartTime() const
 
     auto startIndex = processStatInfo.indexOf(')', -1);
     if (startIndex != -1) {
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         auto tokens = processStatInfo.sliced(startIndex + 2).split(' ');
+#else
+        auto tokens = processStatInfo.midRef(startIndex + 2).split(' ');
+#endif
         if (tokens.size() >= 20) {
             return tokens[19].toULongLong();
         }

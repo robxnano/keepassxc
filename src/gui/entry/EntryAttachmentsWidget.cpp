@@ -31,6 +31,10 @@
 #include "gui/FileDialog.h"
 #include "gui/MessageBox.h"
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 EntryAttachmentsWidget::EntryAttachmentsWidget(QWidget* parent)
     : QWidget(parent)
     , m_ui(new Ui::EntryAttachmentsWidget)

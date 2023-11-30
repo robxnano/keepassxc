@@ -23,9 +23,12 @@
 #include "core/Tools.h"
 #include "streams/qtiocompressor.h"
 
-#include <QtAssert>
 #include <QBuffer>
 #include <QFile>
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
 
 #define UUID_LENGTH 16
 
@@ -114,11 +117,11 @@ void KdbxXmlReader::readDatabase(QIODevice* device, Database* db, KeePass2Random
     }
 
     if (!m_tmpParent->children().isEmpty()) {
-        qWarning("KdbxXmlReader::readDatabase: found %" PRIdQSIZETYPE " invalid group reference(s)", m_tmpParent->children().size());
+        qWarning("KdbxXmlReader::readDatabase: found %zd invalid group reference(s)", static_cast<std::size_t>(m_tmpParent->children().size()));
     }
 
     if (!m_tmpParent->entries().isEmpty()) {
-        qWarning("KdbxXmlReader::readDatabase: found %" PRIdQSIZETYPE " invalid entry reference(s)", m_tmpParent->children().size());
+        qWarning("KdbxXmlReader::readDatabase: found %zd invalid entry reference(s)", static_cast<std::size_t>(m_tmpParent->children().size()));
     }
 
     auto poolKeyList = asConst(m_binaryPool).keys();

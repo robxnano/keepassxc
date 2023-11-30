@@ -21,6 +21,10 @@
 
 #include "format/KdbxXmlWriter.h"
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 bool KdbxWriter::hasError() const
 {
     return m_error;

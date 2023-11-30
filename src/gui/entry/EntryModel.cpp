@@ -32,6 +32,10 @@
 #include "gui/osutils/macutils/MacUtils.h"
 #endif
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 EntryModel::EntryModel(QObject* parent)
     : QAbstractTableModel(parent)
     , m_group(nullptr)

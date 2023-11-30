@@ -22,6 +22,10 @@
 #include <QDataStream>
 #include <QSharedPointer>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 QUuid PasswordKey::UUID("77e90411-303a-43f2-b773-853b05635ead");
 
 constexpr int PasswordKey::SHA256_SIZE;

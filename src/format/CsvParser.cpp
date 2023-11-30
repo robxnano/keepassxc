@@ -21,6 +21,10 @@
 #include <QFile>
 #include <QTextCodec>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 #include "core/Tools.h"
 
 CsvParser::CsvParser()

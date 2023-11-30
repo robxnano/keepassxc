@@ -142,9 +142,9 @@ void DatabaseOpenDialog::tabChanged(int index)
         setTarget(dbWidget, dbWidget->database()->filePath());
     } else {
         // if these list sizes don't match, there's a bug somewhere nearby
-        qWarning("DatabaseOpenDialog: mismatch between tab count %d and DB count %" PRIdQSIZETYPE,
+        qWarning("DatabaseOpenDialog: mismatch between tab count %d and DB count %zd",
                  m_tabBar->count(),
-                 m_tabDbWidgets.count());
+                 static_cast<std::size_t>(m_tabDbWidgets.count()));
     }
 }
 

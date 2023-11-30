@@ -17,6 +17,10 @@
 
 #include "TemporaryFile.h"
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 TemporaryFile::TemporaryFile()
     : TemporaryFile(nullptr)
 {

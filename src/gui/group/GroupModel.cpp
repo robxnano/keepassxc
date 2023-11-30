@@ -27,6 +27,10 @@
 #include "gui/Icons.h"
 #include "keeshare/KeeShare.h"
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 GroupModel::GroupModel(Database* db, QObject* parent)
     : QAbstractItemModel(parent)
     , m_db(nullptr)

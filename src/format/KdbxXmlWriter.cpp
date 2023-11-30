@@ -24,6 +24,10 @@
 #include "format/KeePass2RandomStream.h"
 #include "streams/qtiocompressor.h"
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 /**
  * @param version KDBX version
  */

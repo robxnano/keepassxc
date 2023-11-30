@@ -24,6 +24,10 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 /*!
  * This will \c qCritical() if unable to open the file for reading.
  * @param file the \c .attachment file to decode

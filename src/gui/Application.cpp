@@ -40,6 +40,10 @@
 #include <unistd.h>
 #endif
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 namespace
 {
     constexpr int WaitTimeoutMSec = 150;

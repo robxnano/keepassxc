@@ -26,6 +26,10 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 void PasskeyExporter::showExportDialog(const QList<Entry*>& items)
 {
     if (items.isEmpty()) {

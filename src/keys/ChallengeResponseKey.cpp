@@ -20,6 +20,10 @@
 
 #include "core/AsyncTask.h"
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 QUuid ChallengeResponseKey::UUID("e092495c-e77d-498b-84a1-05ae0d955508");
 
 ChallengeResponseKey::ChallengeResponseKey(YubiKeySlot keySlot)

@@ -28,6 +28,10 @@
 #include <QDataStream>
 #include <QDebug>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 QUuid CompositeKey::UUID("76a7ae25-a542-4add-9849-7c06be945b94");
 
 CompositeKey::CompositeKey()

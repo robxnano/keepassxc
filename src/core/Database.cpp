@@ -32,6 +32,10 @@
 #include <QTemporaryFile>
 #include <QTimer>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 QHash<QUuid, QPointer<Database>> Database::s_uuidMap;
 
 Database::Database()

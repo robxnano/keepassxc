@@ -20,6 +20,10 @@
 
 #include <QIODevice>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 class LayeredStream : public QIODevice
 {
     Q_OBJECT

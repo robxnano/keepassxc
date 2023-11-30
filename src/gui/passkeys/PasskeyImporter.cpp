@@ -28,6 +28,10 @@
 #include <QFileInfo>
 #include <QUuid>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 static const QString IMPORTED_PASSKEYS_GROUP = QStringLiteral("Imported Passkeys");
 
 void PasskeyImporter::importPasskey(QSharedPointer<Database>& database, Entry* entry)

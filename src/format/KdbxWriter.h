@@ -24,7 +24,7 @@
 #include <QCoreApplication>
 
 // clang-format off
-#define CHECK_RETURN_FALSE(x) if (!(x)) return false;
+#define CHECK_RETURN_FALSE(x) if (!(x)) { printf("Error in %s at line %d\n", __func__, __LINE__); return false; }
 // clang-format on
 
 class QIODevice;

@@ -22,6 +22,10 @@
 #include <QTextStream>
 #include <cmath>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 #include "core/Resources.h"
 #include "crypto/Random.h"
 

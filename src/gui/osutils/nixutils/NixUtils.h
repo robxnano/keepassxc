@@ -23,6 +23,10 @@
 #include <QSharedPointer>
 #include <QtDBus/QDBusVariant>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 class NixUtils : public OSUtilsBase, QAbstractNativeEventFilter
 {
     Q_OBJECT
@@ -59,7 +63,11 @@ private:
     explicit NixUtils(QObject* parent = nullptr);
     ~NixUtils() override;
 
-    bool nativeEventFilter(const QByteArray& eventType, void* message, qintptr* result);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    bool nativeEventFilter(const QByteArray& eventType, void* message, qintptr*) override;
+#else
+    bool nativeEventFilter(const QByteArray& eventType, void* message, long int*) override;
+#endif
     QString getAutostartDesktopFilename(bool createDirs = false) const;
 
     bool triggerGlobalShortcut(uint keycode, uint modifiers);

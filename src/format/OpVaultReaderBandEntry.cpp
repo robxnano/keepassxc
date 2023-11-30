@@ -61,7 +61,7 @@ bool OpVaultReader::decryptBandEntry(const QJsonObject& bandEntry,
     QByteArray kBA = QByteArray::fromBase64(entKStr.toUtf8());
     const int wantKsize = 16 + 32 + 32 + 32;
     if (kBA.size() != wantKsize) {
-        qCritical("Malformed \"k\" size; expected %d got %d\n", wantKsize, kBA.size());
+        qCritical("Malformed \"k\" size; expected %d got %zd\n", wantKsize, static_cast<std::size_t>(kBA.size()));
         return false;
     }
 

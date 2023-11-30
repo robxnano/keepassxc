@@ -23,6 +23,10 @@
 #include "format/Kdbx4Writer.h"
 #include "format/KeePass2Writer.h"
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 /**
  * Write a database to a KDBX file.
  *

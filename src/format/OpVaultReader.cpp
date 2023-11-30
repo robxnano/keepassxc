@@ -29,6 +29,10 @@
 
 #include <botan/pwdhash.h>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 OpVaultReader::OpVaultReader(QObject* parent)
     : QObject(parent)
     , m_error(false)

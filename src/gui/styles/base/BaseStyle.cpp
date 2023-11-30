@@ -49,6 +49,11 @@
 
 #include "gui/Icons.h"
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#define reservedShortcutWidth tabWidth
+#endif
+
 QT_BEGIN_NAMESPACE
 Q_GUI_EXPORT int qt_defaultDpiX();
 QT_END_NAMESPACE
@@ -533,7 +538,9 @@ namespace Phantom
             // guard for it, so that it will default to a more safe definition on the
             // next guaranteed big breaking change for Qt. A warning will hopefully get
             // someone to double-check it at some point in the future.
+#ifndef Q_OS_WIN
 #warning "Verify contents and layout of QPalette::cacheKey() have not changed"
+#endif
             QtPrivate::QHashCombine c;
             uint h = qHash(p.currentColorGroup());
             h = c(h, static_cast<uint>(x.u & 0xFFFFFFFFu));

@@ -24,6 +24,10 @@
 #include "core/Metadata.h"
 #include "gui/Icons.h"
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QIODeviceBase QIODevice
+#endif
+
 namespace
 {
     QString PixmapToHTML(const QPixmap& pixmap)
