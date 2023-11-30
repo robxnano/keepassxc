@@ -31,5 +31,5 @@ if(WITH_XC_FDOSECRETS)
         objects/Prompt.cpp
         dbus/DBusTypes.cpp
     )
-    target_link_libraries(fdosecrets Qt5::Core Qt5::Widgets Qt5::DBus ${BOTAN_LIBRARIES})
+    target_link_libraries(fdosecrets Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::DBus ${BOTAN_LIBRARIES})
 endif()

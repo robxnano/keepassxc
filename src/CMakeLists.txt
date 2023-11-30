@@ -220,20 +220,34 @@ if(UNIX AND NOT APPLE)
         list(APPEND keepassx_SOURCES
             gui/osutils/nixutils/X11Funcs.cpp)
     endif()
-    qt5_add_dbus_adaptor(keepassx_SOURCES
-            gui/org.keepassxc.KeePassXC.MainWindow.xml
-            gui/MainWindow.h
-            MainWindow)
 
     set_source_files_properties(
         quickunlock/dbus/org.freedesktop.PolicyKit1.Authority.xml
         PROPERTIES
         INCLUDE "quickunlock/PolkitDbusTypes.h"
         )
+
+if(${QT_VERSION} VERSION_GREATER_EQUAL "6.0.0")
+    qt6_add_dbus_adaptor(keepassx_SOURCES
+            gui/org.keepassxc.KeePassXC.MainWindow.xml
+            gui/MainWindow.h
+            MainWindow)
+
+    qt6_add_dbus_interface(keepassx_SOURCES
+        quickunlock/dbus/org.freedesktop.PolicyKit1.Authority.xml
+        polkit_dbus
+    )
+else()
+    qt5_add_dbus_adaptor(keepassx_SOURCES
+            gui/org.keepassxc.KeePassXC.MainWindow.xml
+            gui/MainWindow.h
+            MainWindow)
+
     qt5_add_dbus_interface(keepassx_SOURCES
         quickunlock/dbus/org.freedesktop.PolicyKit1.Authority.xml
         polkit_dbus
     )
+endif()
 
     find_library(KEYUTILS_LIBRARIES NAMES keyutils)
     if(NOT KEYUTILS_LIBRARIES)
@@ -359,7 +373,7 @@ configure_file(config-keepassx.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-keepas
 configure_file(git-info.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/git-info.h)
 
 add_library(autotype STATIC ${autotype_SOURCES})
-target_link_libraries(autotype Qt5::Core Qt5::Widgets)
+target_link_libraries(autotype Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Widgets)
 
 add_library(keepassx_core STATIC ${keepassx_SOURCES})
 
@@ -369,10 +383,11 @@ target_link_libraries(keepassx_core
         ${keepassxcbrowser_LIB}
         ${qrcode_LIB}
         ${fdosecrets_LIB}
-        Qt5::Core
-        Qt5::Concurrent
-        Qt5::Network
-        Qt5::Widgets
+        Qt${QT_VERSION_MAJOR}::Core
+        Qt${QT_VERSION_MAJOR}::Concurrent
+        Qt${QT_VERSION_MAJOR}::Gui
+        Qt${QT_VERSION_MAJOR}::Network
+        Qt${QT_VERSION_MAJOR}::Widgets
         ${BOTAN_LIBRARIES}
         ${PCSC_LIBRARIES}
         ${ZXCVBN_LIBRARIES}
@@ -381,6 +396,11 @@ target_link_libraries(keepassx_core
         ${KEYUTILS_LIBRARIES}
         ${thirdparty_LIBRARIES}
 	)
+
+if (${QT_VERSION_MAJOR} VERSION_GREATER_EQUAL "6.0.0")
+    target_link_libraries(keepassx_core Qt6::Core5Compat Qt6::SvgWidgets)
+    target_link_libraries(autotype Qt6::Core5Compat)
+endif()
 
 if(WITH_XC_SSHAGENT)
   target_link_libraries(keepassx_core sshagent)
@@ -391,19 +411,22 @@ endif()
 
 if(APPLE)
     target_link_libraries(keepassx_core "-framework Foundation -framework AppKit -framework Carbon -framework Security -framework LocalAuthentication")
-    if(Qt5MacExtras_FOUND)
-        target_link_libraries(keepassx_core Qt5::MacExtras)
+    if(Qt${QT_VERSION_MAJOR}MacExtras_FOUND)
+        target_link_libraries(keepassx_core Qt${QT_VERSION_MAJOR}::MacExtras)
     endif()
 endif()
 if(HAIKU)
     target_link_libraries(keepassx_core network)
 endif()
 if(UNIX AND NOT APPLE)
-    target_link_libraries(keepassx_core Qt5::DBus)
+    target_link_libraries(keepassx_core Qt${QT_VERSION_MAJOR}::DBus)
     if(WITH_XC_X11)
-        target_link_libraries(keepassx_core Qt5::X11Extras X11)
+        if(${QT_VERSION} VERSION_LESS "6.0.0")
+            target_link_libraries(keepassx_core Qt5::X11Extras)
+        endif()
+        target_link_libraries(keepassx_core X11)
     endif()
-    include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
+    include_directories(${Qt${QT_VERSION_MAJOR}Gui_PRIVATE_INCLUDE_DIRS})
 endif()
 if(WIN32)
     target_link_libraries(keepassx_core Wtsapi32.lib Ws2_32.lib)
@@ -523,7 +546,7 @@ if(WIN32)
                 COMPONENT Runtime)
 
         # Use windeployqt.exe to setup Qt dependencies
-        if(Qt5Core_VERSION VERSION_LESS "5.14.1")
+        if(${QT_VERSION} VERSION_LESS "5.14.1")
             set(WINDEPLOYQT_MODE "--release")
             if(CMAKE_BUILD_TYPE_LOWER STREQUAL "debug")
                 set(WINDEPLOYQT_MODE "--debug")
@@ -556,7 +579,7 @@ if(WIN32)
     endif()
 
     # install CA cert chains
-    find_file(SSL_CA_BUNDLE ca-bundle.crt PATHS "${Qt5_PREFIX}/ssl/certs")
+    find_file(SSL_CA_BUNDLE ca-bundle.crt PATHS "${QT_PREFIX}/ssl/certs")
     if(SSL_CA_BUNDLE)
         install(FILES ${SSL_CA_BUNDLE} DESTINATION "ssl/certs")
     else()

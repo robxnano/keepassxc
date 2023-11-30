@@ -45,7 +45,7 @@ set(cli_SOURCES
         Show.cpp)
 
 add_library(cli STATIC ${cli_SOURCES})
-target_link_libraries(cli Qt5::Core)
+target_link_libraries(cli Qt${QT_VERSION_MAJOR}::Core)
 
 find_package(Readline)
 

@@ -14,7 +14,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-cmake_minimum_required(VERSION 3.3.0)
+cmake_minimum_required(VERSION 3.16.0)
 
 project(KeePassXC)
 set(APP_ID "org.keepassxc.${PROJECT_NAME}")
@@ -492,41 +492,57 @@ endif()
 
 include(CLangFormat)
 
+set(QT_DEFAULT_MAJOR_VERSION 6 CACHE STRING "The version of Qt to build with")
+find_package(QT NAMES Qt${QT_DEFAULT_MAJOR_VERSION} QtCOMPONENTS Core REQUIRED)
+message(STATUS "Found Qt version ${QT_VERSION}")
+
 set(QT_COMPONENTS Core Network Concurrent Gui Svg Widgets Test LinguistTools)
+if(${QT_VERSION} VERSION_GREATER_EQUAL "6.0.0")
+    list(APPEND QT_COMPONENTS Core5Compat SvgWidgets)
+endif()
 if(UNIX AND NOT APPLE)
     if(WITH_XC_X11)
-        list(APPEND QT_COMPONENTS X11Extras)
+        if(${QT_VERSION} VERSION_LESS "6.0.0")
+            list(APPEND QT_COMPONENTS X11Extras)
+        elseif(${QT_VERSION} VERSION_LESS "6.2.0")
+            message(WARNING "X11 support on Qt 6 requires version 6.2.0 or later")
+            set(WITH_XC_X11 OFF)
+        endif()
     endif()
-    find_package(Qt5 COMPONENTS ${QT_COMPONENTS} DBus REQUIRED)
+    find_package(Qt${QT_VERSION_MAJOR} COMPONENTS ${QT_COMPONENTS} DBus REQUIRED)
 elseif(APPLE)
-    find_package(Qt5 COMPONENTS ${QT_COMPONENTS} REQUIRED HINTS
+    find_package(Qt${QT_VERSION_MAJOR} COMPONENTS ${QT_COMPONENTS} REQUIRED HINTS
             /usr/local/opt/qt@5/lib/cmake
             /usr/local/Cellar/qt@5/*/lib/cmake
             /opt/homebrew/opt/qt@5/lib/cmake
             ENV PATH)
-    find_package(Qt5 COMPONENTS MacExtras HINTS
+    find_package(Qt${QT_VERSION_MAJOR} COMPONENTS MacExtras HINTS
             /usr/local/opt/qt@5/lib/cmake
             /usr/local/Cellar/qt@5/*/lib/cmake
             /opt/homebrew/opt/qt@5/lib/cmake
             ENV PATH)
 else()
-    find_package(Qt5 COMPONENTS ${QT_COMPONENTS} REQUIRED)
+    find_package(Qt${QT_VERSION_MAJOR} COMPONENTS ${QT_COMPONENTS} REQUIRED)
 endif()
 
-if(Qt5Core_VERSION VERSION_LESS "5.2.0")
+if(${QT_VERSION} VERSION_LESS "5.2.0")
     message(FATAL_ERROR "Qt version 5.2.0 or higher is required")
 endif()
 
 # CBOR for Passkeys requires Qt 5.12
-if(Qt5Core_VERSION VERSION_LESS "5.12.0")
+if(${QT_VERSION} VERSION_LESS "5.12.0")
     message(STATUS "Qt version 5.12.0 or higher is required for Passkeys support")
     set(WITH_XC_BROWSER_PASSKEYS OFF)
 endif()
 
-get_filename_component(Qt5_PREFIX ${Qt5_DIR}/../../.. REALPATH)
+get_filename_component(QT_PREFIX ${QT_DIR}/../../.. REALPATH)
 if(APPLE)
     # Add includes under Qt5 Prefix in case Qt6 is also installed
-    include_directories(SYSTEM ${Qt5_PREFIX}/include)
+    include_directories(SYSTEM ${QT_PREFIX}/include)
+endif()
+
+if(WIN32 AND ${QT_VERSION_MAJOR} VERSION_GREATER_EQUAL "6.0.0")
+    include_directories(${Qt6Gui_PRIVATE_INCLUDE_DIRS})
 endif()
 
 # Process moc automatically
@@ -538,14 +554,14 @@ set(CMAKE_AUTORCC ON)
 
 if(APPLE)
     set(CMAKE_MACOSX_RPATH TRUE)
-    find_program(MACDEPLOYQT_EXE macdeployqt HINTS ${Qt5_PREFIX}/bin ${Qt5_PREFIX}/tools/qt5/bin ENV PATH)
+    find_program(MACDEPLOYQT_EXE macdeployqt HINTS ${QT_PREFIX}/bin ${QT_PREFIX}/tools/qt${QT_VERSION_MAJOR}/bin ENV PATH)
     if(NOT MACDEPLOYQT_EXE)
         message(FATAL_ERROR "macdeployqt is required to build on macOS")
     endif()
     message(STATUS "Using macdeployqt: ${MACDEPLOYQT_EXE}")
     set(MACDEPLOYQT_EXTRA_BINARIES "")
 elseif(WIN32)
-    find_program(WINDEPLOYQT_EXE windeployqt HINTS ${Qt5_PREFIX}/bin ${Qt5_PREFIX}/tools/qt5/bin ENV PATH)
+    find_program(WINDEPLOYQT_EXE windeployqt HINTS ${QT_PREFIX}/bin ${QT_PREFIX}/tools/qt${QT_VERSION_MAJOR}/bin ENV PATH)
     if(NOT WINDEPLOYQT_EXE)
         message(FATAL_ERROR "windeployqt is required to build on Windows")
     endif()
@@ -622,4 +638,13 @@ else()
     # This will only print ENABLED and DISABLED feature
     feature_summary(WHAT ENABLED_FEATURES DESCRIPTION "Enabled features:")
     feature_summary(WHAT DISABLED_FEATURES DESCRIPTION "Disabled features:")
+endif()
+
+if(WIN32)
+    qt_generate_deploy_app_script(
+        TARGET KeePassXC
+        OUTPUT_SCRIPT deploy_script
+        NO_UNSUPPORTED_PLATFORM_ERROR)
+
+    install(SCRIPT ${deploy_script})
 endif()

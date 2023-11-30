@@ -21,10 +21,10 @@ if(WITH_XC_BROWSER)
 
     # Alloc must be defined in a static library to prevent clashing with clang ASAN definitions
     add_library(proxy_alloc STATIC ../core/Alloc.cpp)
-    target_link_libraries(proxy_alloc PRIVATE Qt5::Core ${BOTAN_LIBRARIES})
+    target_link_libraries(proxy_alloc PRIVATE Qt${QT_VERSION_MAJOR}::Core ${BOTAN_LIBRARIES})
 
     add_executable(keepassxc-proxy ${proxy_SOURCES})
-    target_link_libraries(keepassxc-proxy proxy_alloc Qt5::Core Qt5::Network)
+    target_link_libraries(keepassxc-proxy proxy_alloc Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network)
     install(TARGETS keepassxc-proxy
             BUNDLE DESTINATION . COMPONENT Runtime
             RUNTIME DESTINATION ${PROXY_INSTALL_DIR} COMPONENT Runtime)

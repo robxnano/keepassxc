@@ -90,7 +90,7 @@ macro(add_unit_test)
     endif()
 endmacro(add_unit_test)
 
-set(TEST_LIBRARIES keepassx_core Qt5::Test)
+set(TEST_LIBRARIES keepassx_core Qt${QT_VERSION_MAJOR}::Test)
 
 set(testsupport_SOURCES
         modeltest.cpp
@@ -98,7 +98,10 @@ set(testsupport_SOURCES
         mock/MockClock.cpp
         util/TemporaryFile.cpp)
 add_library(testsupport STATIC ${testsupport_SOURCES})
-target_link_libraries(testsupport Qt5::Core Qt5::Concurrent Qt5::Widgets Qt5::Test)
+target_link_libraries(testsupport Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Concurrent Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Test)
+if (${QT_VERSION_MAJOR} VERSION_GREATER_EQUAL "6.0.0")
+   target_link_libraries(testsupport Qt6::Core5Compat)
+endif()
 
 add_unit_test(NAME testgroup SOURCES TestGroup.cpp
         LIBS testsupport ${TEST_LIBRARIES})

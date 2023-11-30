@@ -20,14 +20,18 @@ list(REMOVE_ITEM TRANSLATION_FILES keepassxc_en.ts)
 list(REMOVE_ITEM TRANSLATION_FILES ${TRANSLATION_EN_ABS})
 message(STATUS "Including translations...\n")
 
+if(${QT_VERSION} VERSION_GREATER_EQUAL "6.0.0")
+qt6_add_translation(QM_FILES ${TRANSLATION_FILES})
+else()
 qt5_add_translation(QM_FILES ${TRANSLATION_FILES})
+endif()
 
 if(WIN32)
-    file(GLOB QTBASE_TRANSLATIONS ${Qt5_PREFIX}/share/qt5/translations/qtbase_*.qm)
+    file(GLOB QTBASE_TRANSLATIONS ${QT_PREFIX}/share/qt${QT_VERSION_MAJOR}/translations/qtbase_*.qm)
 elseif(APPLE OR KEEPASSXC_DIST_APPIMAGE)
     file(GLOB QTBASE_TRANSLATIONS
             /usr/share/qt/translations/qtbase_*.qm
-            /usr/share/qt5/translations/qtbase_*.qm
+            /usr/share/qt${QT_VERSION_MAJOR}/translations/qtbase_*.qm
             ${Qt5_PREFIX}/translations/qtbase_*.qm)
 endif()
 set(QM_FILES ${QM_FILES} ${QTBASE_TRANSLATIONS})

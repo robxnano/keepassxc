@@ -3,7 +3,10 @@ include_directories(SYSTEM ${X11_X11_INCLUDE_PATH})
 set(autotype_XCB_SOURCES AutoTypeXCB.cpp)
 
 add_library(keepassxc-autotype-xcb MODULE ${autotype_XCB_SOURCES})
-target_link_libraries(keepassxc-autotype-xcb keepassx_core Qt5::Core Qt5::Widgets Qt5::X11Extras ${X11_X11_LIB} ${X11_Xi_LIB} ${X11_XTest_LIB})
+target_link_libraries(keepassxc-autotype-xcb keepassx_core Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Widgets ${X11_X11_LIB} ${X11_Xi_LIB} ${X11_XTest_LIB})
+if(${QT_VERSION} VERSION_LESS "6.0.0")
+    target_link_libraries(keepassxc-autotype-xcb Qt5::X11Extras)
+endif()
 install(TARGETS keepassxc-autotype-xcb
         BUNDLE DESTINATION . COMPONENT Runtime
         LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR} COMPONENT Runtime)
