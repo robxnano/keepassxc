@@ -31,7 +31,7 @@ BinaryStream::BinaryStream(QByteArray* ba, QObject* parent)
     , m_timeout(-1)
 {
     m_buffer.reset(new QBuffer(ba));
-    m_buffer->open(QIODevice::ReadWrite);
+    m_buffer->open(QIODeviceBase::ReadWrite);
 
     m_device = m_buffer.data();
 }

@@ -74,7 +74,7 @@ int AttachmentExport::executeWithDatabase(QSharedPointer<Database> database, QSh
 
     auto exportFileName = args.at(3);
     QFile exportFile(exportFileName);
-    if (!exportFile.open(QIODevice::WriteOnly)) {
+    if (!exportFile.open(QIODeviceBase::WriteOnly)) {
         err << QObject::tr("Could not open output file %1.").arg(exportFileName) << Qt::endl;
         return EXIT_FAILURE;
     }

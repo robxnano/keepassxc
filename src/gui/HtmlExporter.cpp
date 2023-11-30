@@ -115,7 +115,7 @@ bool HtmlExporter::exportDatabase(const QString& filename,
                                   bool ascending)
 {
     QFile file(filename);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+    if (!file.open(QIODeviceBase::WriteOnly | QIODeviceBase::Truncate)) {
         m_error = file.errorString();
         return false;
     }

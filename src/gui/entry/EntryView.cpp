@@ -19,6 +19,7 @@
 #include "EntryView.h"
 
 #include <QAccessible>
+#include <QActionGroup>
 #include <QDrag>
 #include <QGuiApplication>
 #include <QHeaderView>

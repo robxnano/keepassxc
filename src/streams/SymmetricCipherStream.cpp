@@ -58,7 +58,7 @@ void SymmetricCipherStream::resetInternalState()
     m_cipher->reset();
 }
 
-bool SymmetricCipherStream::open(QIODevice::OpenMode mode)
+bool SymmetricCipherStream::open(QIODeviceBase::OpenMode mode)
 {
     return m_isInitialized && LayeredStream::open(mode);
 }

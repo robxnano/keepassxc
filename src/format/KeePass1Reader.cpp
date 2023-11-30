@@ -18,6 +18,7 @@
 #include "KeePass1Reader.h"
 
 #include <QFile>
+#include <QRegExp>
 #include <QTextCodec>
 
 #include "core/Endian.h"
@@ -338,7 +339,7 @@ KeePass1Reader::testKeys(const QString& password, const QByteArray& keyfileData,
             raiseError(cipherStream->errorString());
             return nullptr;
         }
-        if (!cipherStream->open(QIODevice::ReadOnly)) {
+        if (!cipherStream->open(QIODeviceBase::ReadOnly)) {
             raiseError(cipherStream->errorString());
             return nullptr;
         }
@@ -362,7 +363,7 @@ KeePass1Reader::testKeys(const QString& password, const QByteArray& keyfileData,
                 raiseError(cipherStream->errorString());
                 return nullptr;
             }
-            cipherStream->open(QIODevice::ReadOnly);
+            cipherStream->open(QIODeviceBase::ReadOnly);
             break;
         } else {
             cipherStream.reset();

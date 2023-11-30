@@ -42,7 +42,7 @@ void KeePass1OpenWidget::openDatabase()
     }
 
     QFile file(m_filename);
-    if (!file.open(QIODevice::ReadOnly)) {
+    if (!file.open(QIODeviceBase::ReadOnly)) {
         m_ui->messageWidget->showMessage(tr("Unable to open the database.").append("\n").append(file.errorString()),
                                          MessageWidget::Error);
         return;

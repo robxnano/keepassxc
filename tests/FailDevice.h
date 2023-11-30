@@ -26,7 +26,7 @@ class FailDevice : public QBuffer
 
 public:
     explicit FailDevice(int failAfter, QObject* parent = nullptr);
-    bool open(QIODevice::OpenMode openMode) override;
+    bool open(QIODeviceBase::OpenMode openMode) override;
 
 protected:
     qint64 readData(char* data, qint64 len) override;

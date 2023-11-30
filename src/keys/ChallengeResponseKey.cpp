@@ -66,7 +66,7 @@ bool ChallengeResponseKey::challenge(const QByteArray& challenge)
 QByteArray ChallengeResponseKey::serialize() const
 {
     QByteArray data;
-    QDataStream stream(&data, QIODevice::WriteOnly);
+    QDataStream stream(&data, QIODeviceBase::WriteOnly);
     stream << uuid().toRfc4122() << m_keySlot;
     return data;
 }

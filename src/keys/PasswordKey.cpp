@@ -74,7 +74,7 @@ QSharedPointer<PasswordKey> PasswordKey::fromRawKey(const QByteArray& rawKey)
 QByteArray PasswordKey::serialize() const
 {
     QByteArray data;
-    QDataStream stream(&data, QIODevice::WriteOnly);
+    QDataStream stream(&data, QIODeviceBase::WriteOnly);
     stream << uuid().toRfc4122() << rawKey();
     return data;
 }

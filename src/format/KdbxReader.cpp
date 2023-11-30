@@ -75,7 +75,7 @@ bool KdbxReader::readDatabase(QIODevice* device, QSharedPointer<const CompositeK
     m_protectedStreamKey.clear();
 
     StoreDataStream headerStream(device);
-    headerStream.open(QIODevice::ReadOnly);
+    headerStream.open(QIODeviceBase::ReadOnly);
 
     // read KDBX magic numbers
     quint32 sig1, sig2, version;

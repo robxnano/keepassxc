@@ -45,22 +45,22 @@ namespace Utils
     void setDefaultTextStreams()
     {
         auto fd = new QFile();
-        fd->open(stdout, QIODevice::WriteOnly);
+        fd->open(stdout, QIODeviceBase::WriteOnly);
         STDOUT.setDevice(fd);
 
         fd = new QFile();
-        fd->open(stderr, QIODevice::WriteOnly);
+        fd->open(stderr, QIODeviceBase::WriteOnly);
         STDERR.setDevice(fd);
 
         fd = new QFile();
-        fd->open(stdin, QIODevice::ReadOnly);
+        fd->open(stdin, QIODeviceBase::ReadOnly);
         STDIN.setDevice(fd);
 
         fd = new QFile();
 #ifdef Q_OS_WIN
-        fd->open(fopen("nul", "w"), QIODevice::WriteOnly);
+        fd->open(fopen("nul", "w"), QIODeviceBase::WriteOnly);
 #else
-        fd->open(fopen("/dev/null", "w"), QIODevice::WriteOnly);
+        fd->open(fopen("/dev/null", "w"), QIODeviceBase::WriteOnly);
 #endif
         DEVNULL.setDevice(fd);
 

@@ -33,7 +33,7 @@
 bool KeePass2Writer::writeDatabase(const QString& filename, Database* db)
 {
     QFile file(filename);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+    if (!file.open(QIODeviceBase::WriteOnly | QIODeviceBase::Truncate)) {
         raiseError(file.errorString());
         return false;
     }

@@ -170,7 +170,7 @@ void TestGuiFdoSecrets::initTestCase()
 
     // Load the NewDatabase.kdbx file into temporary storage
     QFile sourceDbFile(QStringLiteral(KEEPASSX_TEST_DATA_DIR "/NewDatabase.kdbx"));
-    VERIFY(sourceDbFile.open(QIODevice::ReadOnly));
+    VERIFY(sourceDbFile.open(QIODeviceBase::ReadOnly));
     VERIFY(Tools::readAllFromDevice(&sourceDbFile, m_dbData));
     sourceDbFile.close();
 
@@ -404,7 +404,7 @@ void TestGuiFdoSecrets::testServiceSearchBlockingUnlockMultiple()
     // to avoid modify the original, copy to a temp file first
     QFile sourceDbFile(QStringLiteral(KEEPASSX_TEST_DATA_DIR "/NewDatabase2.kdbx"));
     QByteArray dbData;
-    VERIFY(sourceDbFile.open(QIODevice::ReadOnly));
+    VERIFY(sourceDbFile.open(QIODeviceBase::ReadOnly));
     VERIFY(Tools::readAllFromDevice(&sourceDbFile, dbData));
     sourceDbFile.close();
 

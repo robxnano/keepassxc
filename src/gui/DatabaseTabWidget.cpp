@@ -522,7 +522,7 @@ void DatabaseTabWidget::exportToXML()
     }
 
     QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+    if (!file.open(QIODeviceBase::WriteOnly | QIODeviceBase::Truncate)) {
         emit messageGlobal(tr("Writing the XML file failed").append("\n").append(file.errorString()),
                            MessageWidget::Error);
     }

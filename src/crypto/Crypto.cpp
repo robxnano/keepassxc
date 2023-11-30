@@ -25,6 +25,8 @@
 
 #include <botan/version.h>
 
+#include <QObject>
+
 namespace
 {
     QString g_cryptoError;

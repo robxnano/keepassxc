@@ -64,7 +64,7 @@ void TestCsvExporter::testExport()
     entry->setIcon(5);
 
     QBuffer buffer;
-    QVERIFY(buffer.open(QIODevice::ReadWrite));
+    QVERIFY(buffer.open(QIODeviceBase::ReadWrite));
     m_csvExporter->exportDatabase(&buffer, m_db);
     auto exported = QString::fromUtf8(buffer.buffer());
 
@@ -82,7 +82,7 @@ void TestCsvExporter::testExport()
 void TestCsvExporter::testEmptyDatabase()
 {
     QBuffer buffer;
-    QVERIFY(buffer.open(QIODevice::ReadWrite));
+    QVERIFY(buffer.open(QIODeviceBase::ReadWrite));
     m_csvExporter->exportDatabase(&buffer, m_db);
 
     QCOMPARE(QString::fromUtf8(buffer.buffer().constData()), ExpectedHeaderLine);
@@ -102,7 +102,7 @@ void TestCsvExporter::testNestedGroups()
     entry->setTitle("Test Entry Title");
 
     QBuffer buffer;
-    QVERIFY(buffer.open(QIODevice::ReadWrite));
+    QVERIFY(buffer.open(QIODeviceBase::ReadWrite));
     m_csvExporter->exportDatabase(&buffer, m_db);
     auto exported = QString::fromUtf8(buffer.buffer());
     QVERIFY(exported.startsWith(

@@ -40,6 +40,7 @@
 #include <QUrl>
 #include <QUuid>
 #include <cmath>
+#include <QRegExp>
 
 #ifdef Q_OS_WIN
 #include <windows.h> // for Sleep()

@@ -198,7 +198,7 @@ void Application::applyTheme()
         m_darkTheme = osUtils->isDarkMode();
 #endif
         QFile stylesheetFile(":/styles/base/classicstyle.qss");
-        if (stylesheetFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        if (stylesheetFile.open(QIODeviceBase::ReadOnly | QIODeviceBase::Text)) {
             setStyleSheet(stylesheetFile.readAll());
             stylesheetFile.close();
         }
@@ -355,7 +355,7 @@ bool Application::sendFileNamesToRunningInstance(const QStringList& fileNames)
     }
 
     QByteArray data;
-    QDataStream out(&data, QIODevice::WriteOnly);
+    QDataStream out(&data, QIODeviceBase::WriteOnly);
     out.setVersion(QDataStream::Qt_5_0);
     out << quint32(0); // reserve space for block size
     out << quint32(1); // ID for file name send. TODO: move to enum
@@ -387,7 +387,7 @@ bool Application::sendLockToInstance()
 
     // Send lock signal
     QByteArray data;
-    QDataStream out(&data, QIODevice::WriteOnly);
+    QDataStream out(&data, QIODeviceBase::WriteOnly);
     out.setVersion(QDataStream::Qt_5_0);
     out << quint32(0); // reserve space for block size
     out << quint32(2); // ID for database lock. TODO: move to enum

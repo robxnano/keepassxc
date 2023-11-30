@@ -19,6 +19,7 @@
 #define KEEPASSX_SIGNALMULTIPLEXER_H
 
 #include <QPointer>
+#include <QList>
 
 class SignalMultiplexer
 {

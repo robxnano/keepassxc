@@ -221,7 +221,7 @@ void IconDownloader::fetchFinished()
 QImage IconDownloader::parseImage(QByteArray& imageBytes) const
 {
     QBuffer buff(&imageBytes);
-    buff.open(QIODevice::ReadOnly);
+    buff.open(QIODeviceBase::ReadOnly);
     QImageReader reader(&buff);
 
     if (reader.imageCount() <= 0) {

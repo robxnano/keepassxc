@@ -434,7 +434,7 @@ void TestKeePass2Format::testXmlInvalidXmlChars()
     entry->attributes()->set("SurrogateValid2", strSurrogateValid2);
 
     QBuffer buffer;
-    buffer.open(QIODevice::ReadWrite);
+    buffer.open(QIODeviceBase::ReadWrite);
     bool hasError;
     QString errorString;
     writeXml(&buffer, dbWrite.data(), hasError, errorString);
@@ -552,7 +552,7 @@ void TestKeePass2Format::testKdbxDeviceFailure()
     entry->attachments()->set("test", attachment);
 
     FailDevice failDevice(512);
-    QVERIFY(failDevice.open(QIODevice::WriteOnly));
+    QVERIFY(failDevice.open(QIODeviceBase::WriteOnly));
     bool hasError;
     QString errorString;
     writeKdbx(&failDevice, db.data(), hasError, errorString);

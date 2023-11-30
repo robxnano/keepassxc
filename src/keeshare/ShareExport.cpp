@@ -169,7 +169,7 @@ ShareObserver::Result ShareExport::intoContainer(const QString& resolvedPath,
         QBuffer buffer;
 
         buffer.setBuffer(&dbData);
-        buffer.open(QIODevice::WriteOnly);
+        buffer.open(QIODeviceBase::WriteOnly);
 
         KeePass2Writer writer;
         if (!writer.writeDatabase(&buffer, targetDb.data())) {

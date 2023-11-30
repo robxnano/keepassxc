@@ -132,12 +132,12 @@ bool Database::open(const QString& filePath, QSharedPointer<const CompositeKey> 
 
     // Don't autodetect read-only mode, as it triggers an upstream bug.
     // See https://github.com/keepassxreboot/keepassxc/issues/803
-    // if (!readOnly && !dbFile.open(QIODevice::ReadWrite)) {
+    // if (!readOnly && !dbFile.open(QIODeviceBase::ReadWrite)) {
     //     readOnly = true;
     // }
     //
-    // if (!dbFile.isOpen() && !dbFile.open(QIODevice::ReadOnly)) {
-    if (!dbFile.open(QIODevice::ReadOnly)) {
+    // if (!dbFile.isOpen() && !dbFile.open(QIODeviceBase::ReadOnly)) {
+    if (!dbFile.open(QIODeviceBase::ReadOnly)) {
         if (error) {
             *error = tr("Unable to open file %1.").arg(filePath);
         }
@@ -305,7 +305,7 @@ bool Database::performSave(const QString& filePath, SaveAction action, const QSt
     switch (action) {
     case Atomic: {
         QSaveFile saveFile(filePath);
-        if (saveFile.open(QIODevice::WriteOnly)) {
+        if (saveFile.open(QIODeviceBase::WriteOnly)) {
             // write the database to the file
             if (!writeDatabase(&saveFile, error)) {
                 return false;
@@ -371,7 +371,7 @@ bool Database::performSave(const QString& filePath, SaveAction action, const QSt
     case DirectWrite: {
         // Open the original database file for direct-write
         QFile dbFile(filePath);
-        if (dbFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        if (dbFile.open(QIODeviceBase::WriteOnly | QIODeviceBase::Truncate)) {
             if (!writeDatabase(&dbFile, error)) {
                 return false;
             }
@@ -439,7 +439,7 @@ bool Database::import(const QString& xmlExportPath, QString* error)
 {
     KdbxXmlReader reader(KeePass2::FILE_VERSION_4);
     QFile file(xmlExportPath);
-    file.open(QIODevice::ReadOnly);
+    file.open(QIODeviceBase::ReadOnly);
 
     reader.readDatabase(&file, this);
 

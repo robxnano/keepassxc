@@ -28,7 +28,14 @@
 #include <QStyle>
 #include <QTextStream>
 #ifdef WITH_XC_X11
+#if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
+#define QT_FEATURE_xcb 1
+#include <QGuiApplication>
+#include </usr/include/qt6/QtGui/qguiapplication_platform.h>
+#include </usr/include/qt6/QtXcb/qxcbnativeinterface.h>
+#else
 #include <QX11Info>
+#endif
 
 #include <qpa/qplatformnativeinterface.h>
 
@@ -65,8 +72,13 @@ NixUtils::NixUtils(QObject* parent)
     : OSUtilsBase(parent)
 {
 #ifdef WITH_XC_X11
+#if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
+    dpy = QX11Application::display()
+    rootWindow = DefaultRootWindow(dpy);
+#else
     dpy = QX11Info::display();
     rootWindow = QX11Info::appRootWindow();
+#endif
 #endif
 
     // notify about system color scheme changes
@@ -131,7 +143,7 @@ void NixUtils::setLaunchAtStartup(bool enable)
 {
     if (enable) {
         QFile desktopFile(getAutostartDesktopFilename(true));
-        if (!desktopFile.open(QIODevice::WriteOnly)) {
+        if (!desktopFile.open(QIODeviceBase::WriteOnly)) {
             qWarning("Failed to create autostart desktop file.");
             return;
         }
@@ -141,7 +153,9 @@ void NixUtils::setLaunchAtStartup(bool enable)
         const QString executeablePathOrName = isAppImage ? appImagePath : QApplication::applicationName().toLower();
 
         QTextStream stream(&desktopFile);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         stream.setCodec("UTF-8");
+#endif
         stream << QStringLiteral("[Desktop Entry]") << '\n'
                << QStringLiteral("Name=") << QApplication::applicationDisplayName() << '\n'
                << QStringLiteral("GenericName=") << tr("Password Manager") << '\n'
@@ -193,7 +207,7 @@ void NixUtils::registerNativeEventFilter()
     qApp->installNativeEventFilter(this);
 }
 
-bool NixUtils::nativeEventFilter(const QByteArray& eventType, void* message, long*)
+bool NixUtils::nativeEventFilter(const QByteArray& eventType, void* message, qintptr*)
 {
 #ifdef WITH_XC_X11
     if (eventType != QByteArrayLiteral("xcb_generic_event_t")) {
@@ -236,7 +250,7 @@ bool NixUtils::triggerGlobalShortcut(uint keycode, uint modifiers)
 bool NixUtils::registerGlobalShortcut(const QString& name, Qt::Key key, Qt::KeyboardModifiers modifiers, QString* error)
 {
 #ifdef WITH_XC_X11
-    auto keycode = XKeysymToKeycode(dpy, qcharToNativeKeyCode(key));
+    auto keycode = XKeysymToKeycode(dpy, qcharToNativeKeyCode(QLatin1Char(key)));
     auto modifierscode = qtToNativeModifiers(modifiers);
 
     // Check if this key combo is registered to another shortcut
@@ -330,7 +344,7 @@ quint64 NixUtils::getProcessStartTime() const
     QString processStatPath = QString("/proc/%1/stat").arg(QCoreApplication::applicationPid());
     QFile processStatFile(processStatPath);
 
-    if (!processStatFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if (!processStatFile.open(QIODeviceBase::ReadOnly | QIODeviceBase::Text)) {
         qDebug() << "nixutils: failed to open " << processStatPath;
         return 0;
     }
@@ -341,7 +355,7 @@ quint64 NixUtils::getProcessStartTime() const
 
     auto startIndex = processStatInfo.indexOf(')', -1);
     if (startIndex != -1) {
-        auto tokens = processStatInfo.midRef(startIndex + 2).split(' ');
+        auto tokens = processStatInfo.sliced(startIndex + 2).split(' ');
         if (tokens.size() >= 20) {
             return tokens[19].toULongLong();
         }

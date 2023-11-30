@@ -304,7 +304,7 @@ QByteArray Icons::saveToBytes(const QImage& image)
 {
     QByteArray ba;
     QBuffer buffer(&ba);
-    buffer.open(QIODevice::WriteOnly);
+    buffer.open(QIODeviceBase::WriteOnly);
     // TODO: check !icon.save()
     image.save(&buffer, "PNG");
     buffer.close();

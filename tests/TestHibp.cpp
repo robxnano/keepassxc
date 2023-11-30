@@ -47,7 +47,7 @@ void TestHibp::testBadHibpFormat()
 {
     QByteArray hibpContents(TEST_BAD_HIBP_CONTENTS);
     QBuffer hibpBuffer(&hibpContents);
-    QVERIFY(hibpBuffer.open(QIODevice::ReadOnly));
+    QVERIFY(hibpBuffer.open(QIODeviceBase::ReadOnly));
 
     QList<QPair<const Entry*, int>> findings;
     QString error;
@@ -60,7 +60,7 @@ void TestHibp::testEmpty()
 {
     QByteArray hibpContents(TEST_HIBP_CONTENTS);
     QBuffer hibpBuffer(&hibpContents);
-    QVERIFY(hibpBuffer.open(QIODevice::ReadOnly));
+    QVERIFY(hibpBuffer.open(QIODeviceBase::ReadOnly));
 
     QList<QPair<const Entry*, int>> findings;
     QString error;
@@ -85,7 +85,7 @@ void TestHibp::testPwned()
 {
     QByteArray hibpContents(TEST_HIBP_CONTENTS);
     QBuffer hibpBuffer(&hibpContents);
-    QVERIFY(hibpBuffer.open(QIODevice::ReadOnly));
+    QVERIFY(hibpBuffer.open(QIODeviceBase::ReadOnly));
 
     Group* root = m_db->rootGroup();
 

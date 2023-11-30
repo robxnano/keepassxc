@@ -205,7 +205,7 @@ void QtIOCompressorPrivate::setZlibError(const QString &errorMessage, int zlibEr
     \code
         QFile file("foo");
         QtIOCompressor compressor(&file);
-        compressor.open(QIODevice::WriteOnly);
+        compressor.open(QIODeviceBase::WriteOnly);
         compressor.write(QByteArray() << "The quick brown fox");
         compressor.close();
     \endcode
@@ -214,7 +214,7 @@ void QtIOCompressorPrivate::setZlibError(const QString &errorMessage, int zlibEr
     \code
         QFile file("foo");
         QtIOCompressor compressor(&file);
-        compressor.open(QIODevice::ReadOnly);
+        compressor.open(QIODeviceBase::ReadOnly);
         const QByteArray text = compressor.readAll();
         compressor.close();
     \endcode

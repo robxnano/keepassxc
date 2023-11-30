@@ -230,7 +230,7 @@ const QList<QSharedPointer<ChallengeResponseKey>>& CompositeKey::challengeRespon
 QByteArray CompositeKey::serialize() const
 {
     QByteArray data;
-    QDataStream stream(&data, QIODevice::WriteOnly);
+    QDataStream stream(&data, QIODeviceBase::WriteOnly);
     // Write Composite Key UUID then each sub-key UUID and data
     stream << uuid().toRfc4122();
     for (auto const& key : m_keys) {

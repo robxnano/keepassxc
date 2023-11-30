@@ -25,9 +25,9 @@ FailDevice::FailDevice(int failAfter, QObject* parent)
 {
 }
 
-bool FailDevice::open(QIODevice::OpenMode openMode)
+bool FailDevice::open(QIODeviceBase::OpenMode openMode)
 {
-    return QBuffer::open(openMode | QIODevice::Unbuffered);
+    return QBuffer::open(openMode | QIODeviceBase::Unbuffered);
 }
 
 qint64 FailDevice::readData(char* data, qint64 len)

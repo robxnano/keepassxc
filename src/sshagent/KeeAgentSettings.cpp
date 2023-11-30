@@ -464,7 +464,7 @@ bool KeeAgentSettings::toOpenSSHKey(const QString& username,
             return false;
         }
 
-        if (!localFile.open(QIODevice::ReadOnly)) {
+        if (!localFile.open(QIODeviceBase::ReadOnly)) {
             m_error = QCoreApplication::translate("KeeAgentSettings", "Failed to open private key");
             return false;
         }

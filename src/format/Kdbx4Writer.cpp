@@ -64,7 +64,7 @@ bool Kdbx4Writer::writeDatabase(QIODevice* device, Database* db)
     QByteArray headerData;
     {
         QBuffer header;
-        header.open(QIODevice::WriteOnly);
+        header.open(QIODeviceBase::WriteOnly);
 
         writeMagicNumbers(&header, KeePass2::SIGNATURE_1, KeePass2::SIGNATURE_2, db->formatVersion());
 
@@ -115,7 +115,7 @@ bool Kdbx4Writer::writeDatabase(QIODevice* device, Database* db)
     QScopedPointer<SymmetricCipherStream> cipherStream;
 
     hmacBlockStream.reset(new HmacBlockStream(device, hmacKey));
-    if (!hmacBlockStream->open(QIODevice::WriteOnly)) {
+    if (!hmacBlockStream->open(QIODeviceBase::WriteOnly)) {
         raiseError(hmacBlockStream->errorString());
         return false;
     }
@@ -126,7 +126,7 @@ bool Kdbx4Writer::writeDatabase(QIODevice* device, Database* db)
         raiseError(cipherStream->errorString());
         return false;
     }
-    if (!cipherStream->open(QIODevice::WriteOnly)) {
+    if (!cipherStream->open(QIODeviceBase::WriteOnly)) {
         raiseError(cipherStream->errorString());
         return false;
     }
@@ -139,7 +139,7 @@ bool Kdbx4Writer::writeDatabase(QIODevice* device, Database* db)
     } else {
         ioCompressor.reset(new QtIOCompressor(cipherStream.data()));
         ioCompressor->setStreamFormat(QtIOCompressor::GzipFormat);
-        if (!ioCompressor->open(QIODevice::WriteOnly)) {
+        if (!ioCompressor->open(QIODeviceBase::WriteOnly)) {
             raiseError(ioCompressor->errorString());
             return false;
         }
@@ -242,7 +242,7 @@ void Kdbx4Writer::writeAttachments(QIODevice* device, Database* db)
 bool Kdbx4Writer::serializeVariantMap(const QVariantMap& map, QByteArray& outputBytes)
 {
     QBuffer buf(&outputBytes);
-    buf.open(QIODevice::WriteOnly);
+    buf.open(QIODeviceBase::WriteOnly);
     CHECK_RETURN_FALSE(buf.write(Endian::sizedIntToBytes(KeePass2::VARIANTMAP_VERSION, KeePass2::BYTEORDER)) == 2);
 
     bool ok;

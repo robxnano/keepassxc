@@ -80,7 +80,7 @@ bool Kdbx4Reader::readDatabaseImpl(QIODevice* device,
         return false;
     }
     HmacBlockStream hmacStream(device, hmacKey);
-    if (!hmacStream.open(QIODevice::ReadOnly)) {
+    if (!hmacStream.open(QIODeviceBase::ReadOnly)) {
         raiseError(hmacStream.errorString());
         return false;
     }
@@ -95,7 +95,7 @@ bool Kdbx4Reader::readDatabaseImpl(QIODevice* device,
         raiseError(cipherStream.errorString());
         return false;
     }
-    if (!cipherStream.open(QIODevice::ReadOnly)) {
+    if (!cipherStream.open(QIODeviceBase::ReadOnly)) {
         raiseError(cipherStream.errorString());
         return false;
     }
@@ -109,7 +109,7 @@ bool Kdbx4Reader::readDatabaseImpl(QIODevice* device,
     } else {
         ioCompressor.reset(new QtIOCompressor(&cipherStream));
         ioCompressor->setStreamFormat(QtIOCompressor::GzipFormat);
-        if (!ioCompressor->open(QIODevice::ReadOnly)) {
+        if (!ioCompressor->open(QIODeviceBase::ReadOnly)) {
             raiseError(ioCompressor->errorString());
             return false;
         }
@@ -204,7 +204,7 @@ bool Kdbx4Reader::readHeaderField(StoreDataStream& device, Database* db)
 
     case KeePass2::HeaderFieldID::KdfParameters: {
         QBuffer bufIoDevice(&fieldData);
-        if (!bufIoDevice.open(QIODevice::ReadOnly)) {
+        if (!bufIoDevice.open(QIODeviceBase::ReadOnly)) {
             raiseError(tr("Failed to open buffer for KDF parameters in header"));
             return false;
         }

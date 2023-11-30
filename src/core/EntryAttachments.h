@@ -26,7 +26,7 @@
 #include <QObject>
 #include <QSharedPointer>
 
-class QStringList;
+// class QStringList;
 
 class EntryAttachments : public ModifiableObject
 {

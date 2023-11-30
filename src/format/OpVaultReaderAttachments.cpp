@@ -37,7 +37,7 @@ bool OpVaultReader::readAttachment(const QString& filePath,
                                    QByteArray& payload)
 {
     QFile file(filePath);
-    if (!file.open(QIODevice::ReadOnly)) {
+    if (!file.open(QIODeviceBase::ReadOnly)) {
         qCritical() << QString("Unable to open \"%s\" for reading").arg(file.fileName());
         return false;
     }

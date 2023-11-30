@@ -22,7 +22,7 @@ StoreDataStream::StoreDataStream(QIODevice* baseDevice)
 {
 }
 
-bool StoreDataStream::open(QIODevice::OpenMode mode)
+bool StoreDataStream::open(QIODeviceBase::OpenMode mode)
 {
     bool result = LayeredStream::open(mode);
 

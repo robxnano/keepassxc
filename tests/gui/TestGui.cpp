@@ -1299,7 +1299,7 @@ void TestGui::testDragAndDropEntry()
 
     QMimeData mimeData;
     QByteArray encoded;
-    QDataStream stream(&encoded, QIODevice::WriteOnly);
+    QDataStream stream(&encoded, QIODeviceBase::WriteOnly);
 
     auto entry = entryView->entryFromIndex(sourceIndex);
     stream << entry->group()->database()->uuid() << entry->uuid();
@@ -2095,7 +2095,7 @@ void TestGui::dragAndDropGroup(const QModelIndex& sourceIndex,
 
     QMimeData mimeData;
     QByteArray encoded;
-    QDataStream stream(&encoded, QIODevice::WriteOnly);
+    QDataStream stream(&encoded, QIODeviceBase::WriteOnly);
     Group* group = groupModel->groupFromIndex(sourceIndex);
     stream << group->database()->uuid() << group->uuid();
     mimeData.setData("application/x-keepassx-group", encoded);

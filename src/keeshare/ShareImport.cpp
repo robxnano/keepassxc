@@ -65,7 +65,7 @@ ShareObserver::Result ShareImport::containerInto(const QString& resolvedPath,
     } else {
         // Open KDBX file directly
         QFile file(resolvedPath);
-        if (!file.open(QIODevice::ReadOnly)) {
+        if (!file.open(QIODeviceBase::ReadOnly)) {
             qCritical("Unable to open file %s.", qPrintable(reference.path));
             return {reference.path, ShareObserver::Result::Error, file.errorString()};
         }
@@ -74,7 +74,7 @@ ShareObserver::Result ShareImport::containerInto(const QString& resolvedPath,
     }
 
     QBuffer buffer(&dbData);
-    buffer.open(QIODevice::ReadOnly);
+    buffer.open(QIODeviceBase::ReadOnly);
 
     KeePass2Reader reader;
     auto key = QSharedPointer<CompositeKey>::create();

@@ -52,7 +52,7 @@ TemporaryFile::~TemporaryFile()
 
 bool TemporaryFile::open()
 {
-    return QFile::open(QIODevice::ReadWrite);
+    return QFile::open(QIODeviceBase::ReadWrite);
 }
 
 bool TemporaryFile::copyFromFile(const QString& otherFileName)

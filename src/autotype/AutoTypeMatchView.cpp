@@ -37,10 +37,14 @@ public:
         auto index0 = sourceModel()->index(sourceRow, 0, sourceParent);
         auto index1 = sourceModel()->index(sourceRow, 1, sourceParent);
         auto index2 = sourceModel()->index(sourceRow, 2, sourceParent);
-
-        return sourceModel()->data(index0).toString().contains(filterRegExp())
-               || sourceModel()->data(index1).toString().contains(filterRegExp())
-               || sourceModel()->data(index2).toString().contains(filterRegExp());
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+        auto regex = filterRegularExpression();
+#else
+        auto regex = filterRegExp();
+#endif
+        return sourceModel()->data(index0).toString().contains(regex)
+               || sourceModel()->data(index1).toString().contains(regex)
+               || sourceModel()->data(index2).toString().contains(regex);
     }
 };
 

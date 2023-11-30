@@ -35,13 +35,13 @@ void TestHashedBlockStream::testWriteRead()
     QByteArray data = QByteArray::fromHex("603deb1015ca71be2b73aef0857d77811f352c073b6108d72d9810a30914dff4");
 
     QBuffer buffer;
-    QVERIFY(buffer.open(QIODevice::ReadWrite));
+    QVERIFY(buffer.open(QIODeviceBase::ReadWrite));
 
     HashedBlockStream writer(&buffer, 16);
-    QVERIFY(writer.open(QIODevice::WriteOnly));
+    QVERIFY(writer.open(QIODeviceBase::WriteOnly));
 
     HashedBlockStream reader(&buffer);
-    QVERIFY(reader.open(QIODevice::ReadOnly));
+    QVERIFY(reader.open(QIODeviceBase::ReadOnly));
 
     QCOMPARE(writer.write(data.left(16)), qint64(16));
     QVERIFY(writer.reset());
@@ -74,10 +74,10 @@ void TestHashedBlockStream::testWriteRead()
 void TestHashedBlockStream::testReset()
 {
     QBuffer buffer;
-    QVERIFY(buffer.open(QIODevice::WriteOnly));
+    QVERIFY(buffer.open(QIODeviceBase::WriteOnly));
 
     HashedBlockStream writer(&buffer, 16);
-    QVERIFY(writer.open(QIODevice::WriteOnly));
+    QVERIFY(writer.open(QIODeviceBase::WriteOnly));
     QCOMPARE(writer.write(QByteArray(8, 'Z')), qint64(8));
     // test if reset() and close() write only one final block
     QVERIFY(writer.reset());
@@ -89,12 +89,12 @@ void TestHashedBlockStream::testReset()
 void TestHashedBlockStream::testWriteFailure()
 {
     FailDevice failDevice(1500);
-    QVERIFY(failDevice.open(QIODevice::WriteOnly));
+    QVERIFY(failDevice.open(QIODeviceBase::WriteOnly));
 
     QByteArray input(2000, 'Z');
 
     HashedBlockStream writer(&failDevice, 500);
-    QVERIFY(writer.open(QIODevice::WriteOnly));
+    QVERIFY(writer.open(QIODeviceBase::WriteOnly));
 
     QCOMPARE(writer.write(input.left(900)), qint64(900));
     writer.write(input.left(900));

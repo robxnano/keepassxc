@@ -359,7 +359,7 @@ bool NativeMessageInstaller::createNativeMessageFile(SupportedBrowsers browser)
     QDir().mkpath(QFileInfo(path).absolutePath());
 
     QFile scriptFile(path);
-    if (!scriptFile.open(QIODevice::WriteOnly)) {
+    if (!scriptFile.open(QIODeviceBase::WriteOnly)) {
         qWarning() << "Browser Plugin: Failed to open native message file for writing at " << scriptFile.fileName();
         qWarning() << scriptFile.errorString();
         return false;

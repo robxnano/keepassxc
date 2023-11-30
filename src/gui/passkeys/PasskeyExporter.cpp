@@ -81,7 +81,7 @@ void PasskeyExporter::exportSelectedEntry(const Entry* entry, const QString& fol
     }
 
     QFile passkeyFile(fullPath);
-    if (!passkeyFile.open(QIODevice::WriteOnly)) {
+    if (!passkeyFile.open(QIODeviceBase::WriteOnly)) {
         MessageBox::information(
             nullptr, tr("Cannot open file"), tr("Cannot open file \"%1\" for writing.").arg(fullPath));
         return;

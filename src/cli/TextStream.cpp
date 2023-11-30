@@ -34,25 +34,25 @@ TextStream::TextStream(QIODevice* device)
     detectCodec();
 }
 
-TextStream::TextStream(FILE* fileHandle, QIODevice::OpenMode openMode)
+TextStream::TextStream(FILE* fileHandle, QIODeviceBase::OpenMode openMode)
     : QTextStream(fileHandle, openMode)
 {
     detectCodec();
 }
 
-TextStream::TextStream(QString* string, QIODevice::OpenMode openMode)
+TextStream::TextStream(QString* string, QIODeviceBase::OpenMode openMode)
     : QTextStream(string, openMode)
 {
     detectCodec();
 }
 
-TextStream::TextStream(QByteArray* array, QIODevice::OpenMode openMode)
+TextStream::TextStream(QByteArray* array, QIODeviceBase::OpenMode openMode)
     : QTextStream(array, openMode)
 {
     detectCodec();
 }
 
-TextStream::TextStream(const QByteArray& array, QIODevice::OpenMode openMode)
+TextStream::TextStream(const QByteArray& array, QIODeviceBase::OpenMode openMode)
     : QTextStream(array, openMode)
 {
     detectCodec();
@@ -90,10 +90,11 @@ void TextStream::detectCodec()
         codecName = QTextCodec::codecForLocale()->name();
     }
 #endif
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     codecName = env.value("ENCODING_OVERRIDE", codecName);
     auto* codec = QTextCodec::codecForName(codecName.toLatin1());
     if (codec) {
         setCodec(codec);
     }
+#endif
 }

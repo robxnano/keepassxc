@@ -40,8 +40,10 @@ CsvParser::CsvParser()
 {
     m_csv.setBuffer(&m_array);
     m_ts.setDevice(&m_csv);
-    m_csv.open(QIODevice::ReadOnly);
+    m_csv.open(QIODeviceBase::ReadOnly);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     m_ts.setCodec("UTF-8");
+#endif
 }
 
 CsvParser::~CsvParser()
@@ -79,7 +81,7 @@ bool CsvParser::readFile(QFile* device)
         device->close();
     }
 
-    device->open(QIODevice::ReadOnly);
+    device->open(QIODeviceBase::ReadOnly);
     if (!Tools::readAllFromDevice(device, m_array)) {
         appendStatusMsg(QObject::tr("error reading from device"), true);
         m_isFileLoaded = false;
@@ -98,7 +100,7 @@ bool CsvParser::readFile(QFile* device)
 
 void CsvParser::reset()
 {
-    m_ch = 0;
+    m_ch = QChar(0);
     m_currCol = 1;
     m_currRow = 1;
     m_isEof = false;
@@ -389,7 +391,9 @@ void CsvParser::setComment(const QChar& c)
 
 void CsvParser::setCodec(const QString& s)
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     m_ts.setCodec(QTextCodec::codecForName(s.toLocal8Bit()));
+#endif
 }
 
 void CsvParser::setFieldSeparator(const QChar& c)
@@ -433,6 +437,6 @@ int CsvParser::getCsvRows() const
 
 void CsvParser::appendStatusMsg(const QString& s, bool isCritical)
 {
-    m_statusMsg += QObject::tr("%1: (row, col) %2,%3").arg(s, m_currRow, m_currCol).append("\n");
+    m_statusMsg += QObject::tr("%1: (row, col) %2,%3").arg(s, m_currRow, QLatin1Char(m_currCol)).append("\n");
     m_isGood = !isCritical;
 }

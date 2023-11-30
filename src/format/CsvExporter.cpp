@@ -25,7 +25,7 @@
 bool CsvExporter::exportDatabase(const QString& filename, const QSharedPointer<const Database>& db)
 {
     QFile file(filename);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+    if (!file.open(QIODeviceBase::WriteOnly | QIODeviceBase::Truncate)) {
         m_error = file.errorString();
         return false;
     }

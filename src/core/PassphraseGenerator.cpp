@@ -18,6 +18,7 @@
 #include "PassphraseGenerator.h"
 
 #include <QFile>
+#include <QRegularExpression>
 #include <QTextStream>
 #include <cmath>
 
@@ -62,7 +63,7 @@ void PassphraseGenerator::setWordList(const QString& path)
     m_wordlist.clear();
 
     QFile file(path);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if (!file.open(QIODeviceBase::ReadOnly | QIODeviceBase::Text)) {
         qWarning("Couldn't load passphrase wordlist.");
         return;
     }
@@ -75,7 +76,7 @@ void PassphraseGenerator::setWordList(const QString& path)
             line = in.readLine();
         }
     }
-    QRegExp rx("^[0-9]+(-[0-9]+)*\\s+([^\\s]+)$");
+    QRegularExpression rx("^[0-9]+(-[0-9]+)*\\s+([^\\s]+)$");
     while (!line.isNull()) {
         if (isSigned && line.startsWith("-----BEGIN PGP SIGNATURE-----")) {
             break;

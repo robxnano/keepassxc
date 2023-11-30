@@ -306,7 +306,7 @@ QJsonObject OpVaultReader::readAndAssertJsonFile(QFile& file, const QString& str
         return {};
     }
 
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if (!file.open(QIODeviceBase::ReadOnly | QIODeviceBase::Text)) {
         qCritical() << QString("Unable to open \"%1\" readonly+text").arg(absFilePath);
     }
     filePayload = file.readAll();

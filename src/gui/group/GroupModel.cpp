@@ -225,7 +225,7 @@ bool GroupModel::dropMimeData(const QMimeData* data,
 
     // decode and insert
     QByteArray encoded = data->data(isGroup ? types.at(0) : types.at(1));
-    QDataStream stream(&encoded, QIODevice::ReadOnly);
+    QDataStream stream(&encoded, QIODeviceBase::ReadOnly);
 
     Group* parentGroup = groupFromIndex(parent);
 
@@ -335,7 +335,7 @@ QMimeData* GroupModel::mimeData(const QModelIndexList& indexes) const
 
     auto data = new QMimeData();
     QByteArray encoded;
-    QDataStream stream(&encoded, QIODevice::WriteOnly);
+    QDataStream stream(&encoded, QIODeviceBase::WriteOnly);
 
     QSet<Group*> seenGroups;
 

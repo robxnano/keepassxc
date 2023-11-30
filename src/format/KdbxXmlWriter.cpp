@@ -44,7 +44,9 @@ void KdbxXmlWriter::writeDatabase(QIODevice* device,
 
     m_xml.setAutoFormatting(true);
     m_xml.setAutoFormattingIndent(-1); // 1 tab
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     m_xml.setCodec("UTF-8");
+#endif
 
     generateIdMap();
 
@@ -66,7 +68,7 @@ void KdbxXmlWriter::writeDatabase(QIODevice* device,
 void KdbxXmlWriter::writeDatabase(const QString& filename, Database* db)
 {
     QFile file(filename);
-    file.open(QIODevice::WriteOnly | QIODevice::Truncate);
+    file.open(QIODeviceBase::WriteOnly | QIODeviceBase::Truncate);
     writeDatabase(&file, db);
 }
 
@@ -194,11 +196,11 @@ void KdbxXmlWriter::writeBinaries()
             m_xml.writeAttribute("Compressed", "True");
 
             QBuffer buffer;
-            buffer.open(QIODevice::ReadWrite);
+            buffer.open(QIODeviceBase::ReadWrite);
 
             QtIOCompressor compressor(&buffer);
             compressor.setStreamFormat(QtIOCompressor::GzipFormat);
-            compressor.open(QIODevice::WriteOnly);
+            compressor.open(QIODeviceBase::WriteOnly);
 
             qint64 bytesWritten = compressor.write(i.key());
             Q_ASSERT(bytesWritten == i.key().size());

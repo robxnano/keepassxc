@@ -27,6 +27,7 @@
 #include "totp/totp.h"
 
 #include <QDir>
+#include <QRegExp>
 #include <QRegularExpression>
 #include <QUrl>
 
@@ -664,7 +665,7 @@ void Entry::setOverrideUrl(const QString& url)
 
 void Entry::setTags(const QString& tags)
 {
-    static QRegExp rx("(\\,|\\t|\\;)");
+    static QRegularExpression rx("(\\,|\\t|\\;)");
     auto taglist = tags.split(rx, Qt::SkipEmptyParts);
     // Trim whitespace before/after tag text
     for (auto itr = taglist.begin(); itr != taglist.end(); ++itr) {
@@ -681,7 +682,7 @@ void Entry::setTags(const QString& tags)
 void Entry::addTag(const QString& tag)
 {
     auto cleanTag = tag.trimmed();
-    cleanTag.remove(QRegExp("(\\,|\\t|\\;)"));
+    cleanTag.remove(QRegularExpression("(\\,|\\t|\\;)"));
 
     auto taglist = m_data.tags;
     if (!taglist.contains(cleanTag)) {
@@ -694,7 +695,7 @@ void Entry::addTag(const QString& tag)
 void Entry::removeTag(const QString& tag)
 {
     auto cleanTag = tag.trimmed();
-    cleanTag.remove(QRegExp("(\\,|\\t|\\;)"));
+    cleanTag.remove(QRegularExpression("(\\,|\\t|\\;)"));
 
     auto taglist = m_data.tags;
     if (taglist.removeAll(tag) > 0) {
@@ -1311,7 +1312,7 @@ Database* Entry::database()
 QString Entry::maskPasswordPlaceholders(const QString& str) const
 {
     QString result = str;
-    result.replace(QRegExp("(\\{PASSWORD\\})", Qt::CaseInsensitive, QRegExp::RegExp2), "******");
+    result.replace(QRegularExpression("(\\{PASSWORD\\})", QRegularExpression::CaseInsensitiveOption), "******");
     return result;
 }
 
@@ -1440,7 +1441,7 @@ QString Entry::resolveUrl(const QString& url) const
         for (int i = 1; i < cmdList.size(); ++i) {
             // Don't pass arguments to the resolveUrl function (they look like URL's)
             if (!cmdList[i].startsWith("-") && !cmdList[i].startsWith("/")) {
-                return resolveUrl(cmdList[i].remove(QRegExp("'|\"")));
+                return resolveUrl(cmdList[i].remove(QRegularExpression("'|\"")));
             }
         }
 

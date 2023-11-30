@@ -186,7 +186,7 @@ namespace FdoSecrets
 
         // /proc/pid/stat gives ppid, name
         QFile stat(QStringLiteral("/proc/%1/stat").arg(pid));
-        if (stat.open(QIODevice::ReadOnly)) {
+        if (stat.open(QIODeviceBase::ReadOnly)) {
             auto line = stat.readAll();
             // find comm field without looking in what's inside as it's user controlled
             auto commStart = line.indexOf('(');

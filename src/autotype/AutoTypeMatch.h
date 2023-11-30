@@ -21,6 +21,8 @@
 #include <QPair>
 #include <QPointer>
 
+#include "core/Entry.h"
+
 class Entry;
 typedef QPair<QPointer<Entry>, QString> AutoTypeMatch;
 

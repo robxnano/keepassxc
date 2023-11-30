@@ -252,7 +252,7 @@ void TestKeePass1Reader::reopenDatabase(QSharedPointer<Database> db,
                                         const QString& keyfileName)
 {
     QBuffer buffer;
-    buffer.open(QIODevice::ReadWrite);
+    buffer.open(QIODeviceBase::ReadWrite);
 
     KeePass2Writer writer;
     writer.writeDatabase(&buffer, db.data());

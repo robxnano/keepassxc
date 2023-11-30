@@ -52,7 +52,7 @@ int main(int argc, char** argv)
 {
     QT_REQUIRE_VERSION(argc, argv, QT_VERSION_STR)
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 #endif
@@ -100,7 +100,7 @@ int main(int argc, char** argv)
 
     // Show debug information and then exit
     if (parser.isSet(debugInfoOption)) {
-        QTextStream out(stdout, QIODevice::WriteOnly);
+        QTextStream out(stdout, QIODeviceBase::WriteOnly);
         QString debugInfo = Tools::debugInfo().append("\n").append(Crypto::debugInfo());
         out << debugInfo << Qt::endl;
         return EXIT_SUCCESS;
@@ -197,7 +197,7 @@ int main(int argc, char** argv)
         if (pwstdin) {
             // we always need consume a line of STDIN if --pw-stdin is set to clear out the
             // buffer for native messaging, even if the specified file does not exist
-            QTextStream out(stdout, QIODevice::WriteOnly);
+            QTextStream out(stdout, QIODeviceBase::WriteOnly);
             out << QObject::tr("Database password: ") << Qt::flush;
             password = Utils::getPassword();
         }

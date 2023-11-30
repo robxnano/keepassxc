@@ -372,7 +372,7 @@ namespace KeeShareSettings
         rsaKey->get_n().binary_encode(rsaN.data());
 
         QByteArray rsaKeySerialized;
-        QDataStream stream(&rsaKeySerialized, QIODevice::WriteOnly);
+        QDataStream stream(&rsaKeySerialized, QIODeviceBase::WriteOnly);
         stream.writeBytes("ssh-rsa", 7);
         stream.writeBytes(reinterpret_cast<const char*>(rsaE.data()), rsaE.size());
         stream.writeBytes(reinterpret_cast<const char*>(rsaN.data()), rsaN.size());

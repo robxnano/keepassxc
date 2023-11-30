@@ -18,6 +18,9 @@
 #ifndef KEEPASSXC_UTILS_H
 #define KEEPASSXC_UTILS_H
 
+#include <QSharedPointer>
+#include <QString>
+#include <QStringList>
 #include <QTextStream>
 
 class CompositeKey;

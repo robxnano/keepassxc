@@ -38,10 +38,10 @@ class TextStream : public QTextStream
 public:
     TextStream();
     explicit TextStream(QIODevice* device);
-    explicit TextStream(FILE* fileHandle, QIODevice::OpenMode openMode = QIODevice::ReadWrite);
-    explicit TextStream(QString* string, QIODevice::OpenMode openMode = QIODevice::ReadWrite);
-    explicit TextStream(QByteArray* array, QIODevice::OpenMode openMode = QIODevice::ReadWrite);
-    explicit TextStream(const QByteArray& array, QIODevice::OpenMode openMode = QIODevice::ReadOnly);
+    explicit TextStream(FILE* fileHandle, QIODeviceBase::OpenMode openMode = QIODeviceBase::ReadWrite);
+    explicit TextStream(QString* string, QIODeviceBase::OpenMode openMode = QIODeviceBase::ReadWrite);
+    explicit TextStream(QByteArray* array, QIODeviceBase::OpenMode openMode = QIODeviceBase::ReadWrite);
+    explicit TextStream(const QByteArray& array, QIODeviceBase::OpenMode openMode = QIODeviceBase::ReadOnly);
 
     void write(const char* str);
 

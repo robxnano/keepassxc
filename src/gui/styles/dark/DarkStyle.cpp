@@ -105,7 +105,7 @@ QPalette DarkStyle::standardPalette() const
 QString DarkStyle::getAppStyleSheet() const
 {
     QFile extStylesheetFile(QStringLiteral(":/styles/dark/darkstyle.qss"));
-    if (extStylesheetFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if (extStylesheetFile.open(QIODeviceBase::ReadOnly | QIODeviceBase::Text)) {
         return extStylesheetFile.readAll();
     }
     qWarning("Failed to load dark theme stylesheet.");

@@ -49,8 +49,8 @@ class SimpleLineReader : public LineReader
 {
 public:
     SimpleLineReader()
-        : inStream(stdin, QIODevice::ReadOnly)
-        , outStream(stdout, QIODevice::WriteOnly)
+        : inStream(stdin, QIODeviceBase::ReadOnly)
+        , outStream(stdout, QIODeviceBase::WriteOnly)
         , finished(false)
     {
     }

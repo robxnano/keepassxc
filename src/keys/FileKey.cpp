@@ -173,7 +173,7 @@ void FileKey::setRawKey(const QByteArray& data)
 QByteArray FileKey::serialize() const
 {
     QByteArray data;
-    QDataStream stream(&data, QIODevice::WriteOnly);
+    QDataStream stream(&data, QIODeviceBase::WriteOnly);
     stream << uuid().toRfc4122() << rawKey() << static_cast<qint32>(m_type) << m_file;
     return data;
 }
@@ -301,7 +301,7 @@ bool FileKey::loadXml(QIODevice* device, QString* errorMsg)
     if (xmlReader.error()) {
         return false;
     }
-    if (xmlReader.readNextStartElement() && xmlReader.name() != "KeyFile") {
+    if (xmlReader.readNextStartElement() && xmlReader.name() != QLatin1String("KeyFile")) {
         return false;
     }
 
@@ -313,13 +313,13 @@ bool FileKey::loadXml(QIODevice* device, QString* errorMsg)
     } keyFileData;
 
     while (!xmlReader.error() && xmlReader.readNextStartElement()) {
-        if (xmlReader.name() == "Meta") {
+        if (xmlReader.name() == QLatin1String("Meta")) {
             while (!xmlReader.error() && xmlReader.readNextStartElement()) {
-                if (xmlReader.name() == "Version") {
+                if (xmlReader.name() == QLatin1String("Version")) {
                     keyFileData.version = xmlReader.readElementText();
                     if (keyFileData.version.startsWith("1.0")) {
                         m_type = KeePass2XML;
-                    } else if (keyFileData.version == "2.0") {
+                    } else if (keyFileData.version == QLatin1String("2.0")) {
                         m_type = KeePass2XMLv2;
                     } else {
                         if (errorMsg) {
@@ -329,15 +329,15 @@ bool FileKey::loadXml(QIODevice* device, QString* errorMsg)
                     }
                 }
             }
-        } else if (xmlReader.name() == "Key") {
+        } else if (xmlReader.name() == QLatin1String("Key")) {
             while (!xmlReader.error() && xmlReader.readNextStartElement()) {
-                if (xmlReader.name() == "Data") {
+                if (xmlReader.name() == QLatin1String("Data")) {
                     keyFileData.hash = QByteArray::fromHex(xmlReader.attributes().value("Hash").toLatin1());
                     keyFileData.data = xmlReader.readElementText().simplified().replace(" ", "").toLatin1();
 
                     if (keyFileData.version.startsWith("1.0") && Tools::isBase64(keyFileData.data)) {
                         keyFileData.data = QByteArray::fromBase64(keyFileData.data);
-                    } else if (keyFileData.version == "2.0" && Tools::isHex(keyFileData.data)) {
+                    } else if (keyFileData.version == QLatin1String("2.0") && Tools::isHex(keyFileData.data)) {
                         keyFileData.data = QByteArray::fromHex(keyFileData.data);
 
                         CryptoHash hash(CryptoHash::Sha256);
@@ -362,7 +362,8 @@ bool FileKey::loadXml(QIODevice* device, QString* errorMsg)
 
     bool ok = false;
     if (!xmlReader.error() && !keyFileData.data.isEmpty()) {
-        std::memcpy(m_key.data(), keyFileData.data.data(), std::min(SHA256_SIZE, keyFileData.data.size()));
+        std::memcpy(m_key.data(), keyFileData.data.data(),
+                    std::min(static_cast<qsizetype>(SHA256_SIZE), keyFileData.data.size()));
         ok = true;
     }
 
@@ -421,7 +422,7 @@ bool FileKey::loadHex(QIODevice* device)
         return false;
     }
 
-    std::memcpy(m_key.data(), data.data(), std::min(SHA256_SIZE, data.size()));
+    std::memcpy(m_key.data(), data.data(), std::min(static_cast<qsizetype>(SHA256_SIZE), data.size()));
     Botan::secure_scrub_memory(data.data(), static_cast<std::size_t>(data.capacity()));
 
     m_type = FixedBinaryHex;
@@ -447,7 +448,7 @@ bool FileKey::loadHashed(QIODevice* device)
     } while (!buffer.isEmpty());
 
     buffer = cryptoHash.result();
-    std::memcpy(m_key.data(), buffer.data(), std::min(SHA256_SIZE, buffer.size()));
+    std::memcpy(m_key.data(), buffer.data(), std::min(static_cast<qsizetype>(SHA256_SIZE), buffer.size()));
     Botan::secure_scrub_memory(buffer.data(), static_cast<std::size_t>(buffer.capacity()));
 
     m_type = Hashed;

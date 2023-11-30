@@ -479,7 +479,7 @@ QMimeData* EntryModel::mimeData(const QModelIndexList& indexes) const
 
     auto data = new QMimeData();
     QByteArray encoded;
-    QDataStream stream(&encoded, QIODevice::WriteOnly);
+    QDataStream stream(&encoded, QIODeviceBase::WriteOnly);
 
     QSet<Entry*> seenEntries;
 

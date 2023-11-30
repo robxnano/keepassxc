@@ -105,7 +105,7 @@ QPalette LightStyle::standardPalette() const
 QString LightStyle::getAppStyleSheet() const
 {
     QFile extStylesheetFile(QStringLiteral(":/styles/light/lightstyle.qss"));
-    if (extStylesheetFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if (extStylesheetFile.open(QIODeviceBase::ReadOnly | QIODeviceBase::Text)) {
         return extStylesheetFile.readAll();
     }
     qWarning("Failed to load light theme stylesheet.");

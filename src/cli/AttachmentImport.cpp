@@ -65,7 +65,7 @@ int AttachmentImport::executeWithDatabase(QSharedPointer<Database> database, QSh
     auto importFileName = args.at(3);
 
     QFile importFile(importFileName);
-    if (!importFile.open(QIODevice::ReadOnly)) {
+    if (!importFile.open(QIODeviceBase::ReadOnly)) {
         err << QObject::tr("Could not open attachment file %1.").arg(importFileName) << Qt::endl;
         return EXIT_FAILURE;
     }

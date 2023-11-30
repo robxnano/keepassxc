@@ -26,7 +26,7 @@ class StoreDataStream : public LayeredStream
 
 public:
     explicit StoreDataStream(QIODevice* baseDevice);
-    bool open(QIODevice::OpenMode mode) override;
+    bool open(QIODeviceBase::OpenMode mode) override;
     QByteArray storedData() const;
 
 protected:
