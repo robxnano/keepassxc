@@ -21,7 +21,11 @@
 #include "core/Tools.h"
 #include "gui/osutils/nixutils/X11Funcs.h"
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QGuiApplication>
+#else
 #include <QX11Info>
+#endif
 #include <X11/XKBlib.h>
 #include <X11/Xutil.h>
 #include <X11/extensions/XTest.h>
@@ -38,8 +42,16 @@ static const QPair<KeySym, KeySym> deadMap[] = {
 AutoTypePlatformX11::AutoTypePlatformX11()
 {
     // Qt handles XCB slightly differently so we open our own connection
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    QGuiApplication* app = static_cast<QGuiApplication*>(QCoreApplication::instance());
+    if (auto x11 = app->nativeInterface<QNativeInterface::QX11Application>()) {
+        m_dpy = XOpenDisplay(XDisplayString(x11->display()));
+        m_rootWindow = DefaultRootWindow(m_dpy);
+    }
+#else
     m_dpy = XOpenDisplay(XDisplayString(QX11Info::display()));
     m_rootWindow = QX11Info::appRootWindow();
+#endif
 
     m_atomWmState = XInternAtom(m_dpy, "WM_STATE", True);
     m_atomWmName = XInternAtom(m_dpy, "WM_NAME", True);
@@ -628,7 +640,7 @@ bool AutoTypePlatformX11::raiseWindow(WId window)
     event.xclient.message_type = m_atomNetActiveWindow;
     event.xclient.format = 32;
     event.xclient.data.l[0] = 1; // FromApplication
-    event.xclient.data.l[1] = QX11Info::appUserTime();
+    //event.xclient.data.l[1] = QX11Info::appUserTime();
     QWidget* activeWindow = QApplication::activeWindow();
     if (activeWindow) {
         event.xclient.data.l[2] = activeWindow->internalWinId();

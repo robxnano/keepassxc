@@ -29,10 +29,7 @@
 #include <QTextStream>
 #ifdef WITH_XC_X11
 #if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
-#define QT_FEATURE_xcb 1
 #include <QGuiApplication>
-#include </usr/include/qt6/QtGui/qguiapplication_platform.h>
-#include </usr/include/qt6/QtXcb/qxcbnativeinterface.h>
 #else
 #include <QX11Info>
 #endif
@@ -73,8 +70,12 @@ NixUtils::NixUtils(QObject* parent)
 {
 #ifdef WITH_XC_X11
 #if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
-    dpy = QX11Application::display()
-    rootWindow = DefaultRootWindow(dpy);
+    QGuiApplication* app = static_cast<QGuiApplication*>(QCoreApplication::instance());
+
+    if (auto x11 = app->nativeInterface<QNativeInterface::QX11Application>()) {
+        dpy = x11->display();
+        rootWindow = DefaultRootWindow(dpy);
+    }
 #else
     dpy = QX11Info::display();
     rootWindow = QX11Info::appRootWindow();
@@ -254,6 +255,13 @@ bool NixUtils::triggerGlobalShortcut(uint keycode, uint modifiers)
 bool NixUtils::registerGlobalShortcut(const QString& name, Qt::Key key, Qt::KeyboardModifiers modifiers, QString* error)
 {
 #ifdef WITH_XC_X11
+    if (!rootWindow) {
+        if (error) {
+            *error = tr("The root window could not be found");
+        }
+        return false;
+    }
+
     auto keycode = XKeysymToKeycode(dpy, qcharToNativeKeyCode(QLatin1Char(key)));
     auto modifierscode = qtToNativeModifiers(modifiers);
 
